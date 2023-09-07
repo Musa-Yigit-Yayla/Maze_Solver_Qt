@@ -27,7 +27,7 @@ public:
     QWidget* getParent() const;
     void setState(const int state); //invalid value sets the rectangle to an empty path
     int getState() const;
-    void setColor(QColor* color);
+    void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
 };
 
