@@ -7,7 +7,12 @@ RectangleWidget::RectangleWidget(QWidget* parent){
     //paint the rectangle manually
     this->setColor(this->color);
     //set size properties by using the constant expressions
-    this->setFixedSize((RectangleWidget::RECTANGLE_WIDTH, RectangleWidget::RECTANGLE_HEIGHT));
+    int currWidth = RectangleWidget::RECTANGLE_WIDTH;
+    int currHeight = RectangleWidget::RECTANGLE_HEIGHT;
+    QSize size(currWidth, currHeight);
+    this->setFixedSize(size);
+    //connect the signal with the slot for event handling
+    QObject::connect(this, (&RectangleWidget::stateChanged), this, (&RectangleWidget::handleStateChange));
 
 }
 RectangleWidget::~RectangleWidget(){
@@ -54,5 +59,14 @@ QColor RectangleWidget::getColor() const{
 } //returns a copy of the current rectangle's color
 //Static function
 QColor* RectangleWidget::generateColor(int state){
+
+}
+void RectangleWidget::stateChanged(const int state){
+
+}
+void RectangleWidget::handleStateChange(const int state){
+
+}
+void RectangleWidget::mousePressEvent(QMouseEvent* event){
 
 }

@@ -1,9 +1,11 @@
 #include <QWidget>
 #include <QPaintEvent>
+#include <QMouseEvent>
 #include <QPainter>
 #include <cstddef>
 #include <QColor>
 #include <QBrush>
+#include <QSize>
 /**
  *This class represents a Rectangle which will be used in our Maze program
  *Private data fields will be used for the purpose of the maze traversal program
@@ -30,7 +32,8 @@ private:
 public:
     RectangleWidget(QWidget* parent = nullptr);
     ~RectangleWidget();
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
     void setParent(QWidget* parent);
     QWidget* getParent() const;
     void setState(const int state); //invalid value sets the rectangle to an empty path
@@ -38,6 +41,11 @@ public:
     void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
     static QColor* generateColor(int state); //based on a given state we will return a color
+signals:
+    void stateChanged(const int state);
+public slots:
+    void handleStateChange(const int state);
+
 };
 
 #endif // RECTANGLEWIDGET_H
