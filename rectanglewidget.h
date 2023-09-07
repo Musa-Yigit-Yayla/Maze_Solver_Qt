@@ -1,8 +1,12 @@
 #include <QWidget>
+#include <QPaintEvent>
+#include <QPainter>
 #include <cstddef>
 #include <QColor>
+#include <QBrush>
 /**
  *This class represents a Rectangle which will be used in our Maze program
+ *Private data fields will be used for the purpose of the maze traversal program
  *This class represents a generic rectangle, namely a pervasively utilizable.
  *Hence, you can reuse it in your applications
  *@author Musa Yiğit Yayla
@@ -12,10 +16,13 @@
 
 class RectangleWidget: public QWidget{
 public:
-    static const int EMPTY_STATE = 0;
-    static const int VISITED_STATE = 1;
-    static const int WALL_STATE = 2;
-    static const int SOLUTION_STATE = 3;
+    static const int EMPTY_STATE = 0; //white
+    static const int VISITED_STATE = 1; //dark blue
+    static const int WALL_STATE = 2; //dark grey
+    static const int SOLUTION_STATE = 3; //green
+    static const int FAILED_STATE = 4; //red
+    constexpr static const int RECTANGLE_WIDTH = 30; //30 pixels
+    constexpr static const int RECTANGLE_HEIGHT = 30; //30 pixels
 private:
     QWidget* parent = nullptr;
     int state = 0;
@@ -23,12 +30,14 @@ private:
 public:
     RectangleWidget(QWidget* parent = nullptr);
     ~RectangleWidget();
+    void paintEvent(QPaintEvent* event);
     void setParent(QWidget* parent);
     QWidget* getParent() const;
     void setState(const int state); //invalid value sets the rectangle to an empty path
     int getState() const;
     void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
+    static QColor* generateColor(int state); //based on a given state we will return a color
 };
 
 #endif // RECTANGLEWIDGET_H

@@ -6,13 +6,23 @@ RectangleWidget::RectangleWidget(QWidget* parent){
     this->color = RectangleWidget::generateColor(this->state);
     //paint the rectangle manually
     this->setColor(this->color);
+    //set size properties by using the constant expressions
+    this->setFixedSize((RectangleWidget::RECTANGLE_WIDTH, RectangleWidget::RECTANGLE_HEIGHT));
+
 }
 RectangleWidget::~RectangleWidget(){
     //deallocate each dynamically allocated property except from parent
     delete this->color;
 }
 void RectangleWidget::paintEvent(QPaintEvent* event){
-
+    if(this->color != NULL){
+        delete this->color;
+    }
+    this->color = RectangleWidget::generateColor(this->state);
+    QPainter rectPainter;
+    rectPainter.begin(this);
+    QBrush brush(*this->color);
+    rectPainter.setBrush(brush);
 }
 void RectangleWidget::setParent(QWidget* parent){
     this->parent = parent;
