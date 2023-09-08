@@ -21,6 +21,8 @@ using namespace std;
 #define RECTANGLEWIDGET_H
 
 class RectangleWidget: public QWidget{
+Q_OBJECT
+
 public:
     static const int EMPTY_STATE = 0; //white
     static const int VISITED_STATE = 1; //dark blue
@@ -30,6 +32,10 @@ public:
     constexpr static const int RECTANGLE_WIDTH = 30; //30 pixels
     constexpr static const int RECTANGLE_HEIGHT = 30; //30 pixels
     static  const vector< QColor> DARK_BLUE_COLOR_SET;
+    static const vector<QColor> RED_COLOR_SET;
+    static const QColor WALL_COLOR;
+    static const QColor SOLUTION_COLOR;
+    static const QColor EMPTY_COLOR;
 private:
     QWidget* parent = nullptr;
     int state = 0;
@@ -45,7 +51,7 @@ public:
     int getState() const;
     void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
-    static QColor& generateColor(int state); //based on a given state we will return a color
+    static QColor generateColor(int state); //based on a given state we will return a color
 signals:
     void stateChanged(const int state);
 public slots:

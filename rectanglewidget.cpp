@@ -3,7 +3,7 @@
 RectangleWidget::RectangleWidget(QWidget* parent){
     this->parent = parent;
     //state is initially set to 0
-    this->color = RectangleWidget::generateColor(this->state);
+    this->color = new QColor(RectangleWidget::generateColor(this->state));
     //paint the rectangle manually
     this->setColor(this->color);
     //set size properties by using the constant expressions
@@ -23,7 +23,7 @@ void RectangleWidget::paintEvent(QPaintEvent* event){
     if(this->color != NULL){
         delete this->color;
     }
-    this->color = RectangleWidget::generateColor(this->state);
+    this->color = new QColor(RectangleWidget::generateColor(this->state));
     QPainter rectPainter;
     rectPainter.begin(this);
     QBrush brush(*this->color);
@@ -46,43 +46,58 @@ void RectangleWidget::setState(const int state){
         case FAILED_STATE: this->state = state; break;
         default: this->state = 0;
     }
-        RectangleWidget::generateColor(this->state);
+        newColor = new QColor(RectangleWidget::generateColor(this->state));
+    this->setColor(newColor);
 } //invalid value sets the rectangle to an empty path
 int RectangleWidget::getState() const{
     return this->state;
 }
 void RectangleWidget::setColor(QColor* color){
+    this->color = color;
     this->update();
 } //Will be used for external purposes not in this project's context
 
 //Caller is responsible of deallocation of the QColor
 QColor RectangleWidget::getColor() const{
-    return *(this->color()); // return by copy
+    return QColor(*this->color); // return by copy
 
-} //returns a copy of the current rectangle's color
+}
+//returns a copy of the current rectangle's color
 //Static function
-QColor& RectangleWidget::generateColor(int state){
+//If the given state is invalid white color is returned
+QColor RectangleWidget::generateColor(int state){
+    QColor result;
     switch(state){
         case VISITED_STATE: //dark blue
-
-        break;
+            result = RectangleWidget::DARK_BLUE_COLOR_SET.at(rand() % DARK_BLUE_COLOR_SET.size()); break;
         case WALL_STATE: //dark grey fixed color
-
-        break;
-
+            result = RectangleWidget::WALL_COLOR; break;
+        case SOLUTION_STATE:
+            result = RectangleWidget::SOLUTION_COLOR; break;
+        case FAILED_STATE:
+            result = RectangleWidget::RED_COLOR_SET.at(rand() % RED_COLOR_SET.size()); break;
+        default:
+            result = RectangleWidget::EMPTY_COLOR; break;
     }
+    return result;
 }
+//Signal which will be emitted by mouse clicked
 void RectangleWidget::stateChanged(const int state){
 
 }
+//slot which will handle the state change
 void RectangleWidget::handleStateChange(const int state){
-
+    this->setState(state); //sets the new state, updates the color and repaints the widget
 }
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
-
+    int nextState
+    emit stateChanged();
 }
 
-static  const vector< QColor> DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), QColor(25, 25, 112), QColor(72, 61, 139), QColor(65, 105, 225), QColor(75, 0, 139)};
-
+const vector<QColor> RectangleWidget::DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), QColor(25, 25, 112), QColor(72, 61, 139), QColor(65, 105, 225), QColor(75, 0, 139)};
+const vector<QColor> RectangleWidget::RED_COLOR_SET = {QColor(139, 0, 0), QColor(178, 34, 34), QColor(220, 20, 60), QColor(255, 0, 0), QColor(255, 69, 0)};
+const QColor RectangleWidget::WALL_COLOR(64, 64, 64);
+const QColor RectangleWidget::SOLUTION_COLOR(50, 205, 50);
+const QColor RectangleWidget::EMPTY_COLOR(255, 87, 51);
 
 
