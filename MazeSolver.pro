@@ -12,12 +12,14 @@ SOURCES += \
     main.cpp \
     mazepane.cpp \
     widget.cpp \
-    rectanglewidget.cpp
+    rectanglewidget.cpp \
+    mazegenerator.cpp
 
 HEADERS += \
     mazepane.h \
     widget.h \
-    rectanglewidget.h
+    rectanglewidget.h \
+    mazegenerator.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,6 +1,8 @@
 #include "mazepane.h"
 
-MazePane::MazePane()
-{
+MazePane::MazePane(bool autoGenerate){
+
+}
+MazePane::~MazePane(){
 
 }

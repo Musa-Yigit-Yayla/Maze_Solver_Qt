@@ -24,6 +24,8 @@ class RectangleWidget: public QWidget{
 Q_OBJECT
 
 public:
+    static const int SOURCE_CELL_VALUE = 10;
+    static const int TARGET_CELL_VALUE = 20;
     static const int EMPTY_STATE = 0; //white
     static const int VISITED_STATE = 1; //dark blue
     static const int WALL_STATE = 2; //dark grey
