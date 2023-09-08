@@ -6,6 +6,8 @@
 #include <QColor>
 #include <QBrush>
 #include <QSize>
+#include <vector>
+#include <cstdlib>
 /**
  *This class represents a Rectangle which will be used in our Maze program
  *Private data fields will be used for the purpose of the maze traversal program
@@ -13,6 +15,8 @@
  *Hence, you can reuse it in your applications
  *@author Musa Yiğit Yayla
  */
+
+using namespace std;
 #ifndef RECTANGLEWIDGET_H
 #define RECTANGLEWIDGET_H
 
@@ -25,6 +29,7 @@ public:
     static const int FAILED_STATE = 4; //red
     constexpr static const int RECTANGLE_WIDTH = 30; //30 pixels
     constexpr static const int RECTANGLE_HEIGHT = 30; //30 pixels
+    static  const vector< QColor> DARK_BLUE_COLOR_SET;
 private:
     QWidget* parent = nullptr;
     int state = 0;
@@ -40,7 +45,7 @@ public:
     int getState() const;
     void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
-    static QColor* generateColor(int state); //based on a given state we will return a color
+    static QColor& generateColor(int state); //based on a given state we will return a color
 signals:
     void stateChanged(const int state);
 public slots:

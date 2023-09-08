@@ -54,12 +54,23 @@ int RectangleWidget::getState() const{
 void RectangleWidget::setColor(QColor* color){
     this->update();
 } //Will be used for external purposes not in this project's context
+
+//Caller is responsible of deallocation of the QColor
 QColor RectangleWidget::getColor() const{
+    return *(this->color()); // return by copy
 
 } //returns a copy of the current rectangle's color
 //Static function
-QColor* RectangleWidget::generateColor(int state){
+QColor& RectangleWidget::generateColor(int state){
+    switch(state){
+        case VISITED_STATE: //dark blue
 
+        break;
+        case WALL_STATE: //dark grey fixed color
+
+        break;
+
+    }
 }
 void RectangleWidget::stateChanged(const int state){
 
@@ -70,3 +81,8 @@ void RectangleWidget::handleStateChange(const int state){
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
 
 }
+
+static  const vector< QColor> DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), QColor(25, 25, 112), QColor(72, 61, 139), QColor(65, 105, 225), QColor(75, 0, 139)};
+
+
+
