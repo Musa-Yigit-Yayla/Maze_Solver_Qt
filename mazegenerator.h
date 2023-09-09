@@ -2,7 +2,8 @@
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
-#include "mazepane.h"
+#include <algorithm>
+
 
 #ifndef MAZEGENERATOR_H
 #define MAZEGENERATOR_H
@@ -29,11 +30,14 @@ private:
     int wallLabelValue = 0;
 public:
     MazeGenerator(int threshold, int mazeCount, int rowLength, int columnLength, int slv, int tlv, int elv, int wlv);
-    vector<int**> generateMazes();
-    vector<int> getAdjLabels( int label);
-    int getLabel(int row, int column);
-    int getLabelRow(int label);
-    int getLabelColumn(int label);
+    vector<int**> generateMazes() const;
+    int** generateMaze() const;
+    int getRowLength() const;
+    int getColumnLength() const;
+    vector<int> getAdjLabels( int label) const;
+    int getLabel(int row, int column) const;
+    int getLabelRow(int label) const;
+    int getLabelColumn(int label) const;
 };
 
 

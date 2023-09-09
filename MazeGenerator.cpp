@@ -24,20 +24,73 @@ using namespace std;
         }
     }
 
-    vector<int**> MazeGenerator::generateMazes(){
+    vector<int**> MazeGenerator::generateMazes() const{
         vector<int**> result;
         for(int i = 0; i < this->mazeCount; i++){
-            const int* const currColumnLength = const_cast<int*>(& (this->columnLength));
-            const int* const currRowLength = const_cast<int*>(& (this->rowLength));
-            int** currMaze = new int[*currRowLength][*currColumnLength];
+
+        }
+    }
+    //Generates a single maze and returns the pointer to it
+    int** MazeGenerator::generateMaze() const{
+            int** currMaze = new int*[this->rowLength];
+            for(int i = 0; i < this->rowLength; i++){
+                currMaze[i] = new int[this->columnLength];
+            }
             //generate a valid index for the source location
             int source = rand() % this->vertexCount;
             int sourceRow = this->getLabelRow(source);
             int sourceColumn = this->getLabelColumn(source);
             currMaze[sourceRow][sourceColumn] = this->sourceLabelValue;
-        }
+            //generate a random destination but ensure that we do not have it directly adjacent to the source
+            vector<int> sourceAdj = this->getAdjLabels(source);
+            int target = rand() % this->vertexCount;
+            while(count(sourceAdj.begin(), sourceAdj.end(), target) != 0 || target == source){
+                target = rand() % this->vertexCount;
+            }
+            int targetRow = this->getLabelRow(target);
+            int targetColumn = this->getLabelColumn(target);
+            currMaze[targetRow][targetColumn] = this->targetLabelValue;
+            //fill the rest of the maze with walls and empty
+            for(int i = 0; i < this->rowLength; i++){
+                for(int j = 0; j < this->columnLength; j++){
+                    if((i == sourceRow && j == sourceColumn) || (targetRow == i && targetColumn == j)){
+                        continue;
+                    }
+                    //the logic for placing a wall is if we have a wall in an adjacent pos, we simply have 7/10 chance of having a wall placed
+                    //else we have 1/2 chance of placing a wall
+                    int currLabel = this->getLabel(i, j);
+                    vector<int> currAdj = this->getAdjLabels(currLabel);
+                    double generationProportion = 0.5; //proportion for generating a wall
+                    for(int adjLabel: currAdj){
+                        int adjLabelRow = this->getLabelRow(adjLabel);
+                        int adjLabelColumn = this->getLabelColumn(adjLabel);
+                        if(currMaze[adjLabelRow][adjLabelColumn] == this->wallLabelValue){
+                            generationProportion = 0.7;
+                        }
+                    }
+                    const int divisor = 10;
+                    const int generationConstant = generationProportion * 10;
+                    bool generateWall = false;
+                    if(rand() % divisor < generationConstant){
+                        //set the current label as a wall
+                        currMaze[i][j] = this->wallLabelValue;
+                    }
+                    else{
+                        //set it as an empty slot which can be used as a path
+                        currMaze[i][j] = this->emptyLabelValue;
+                    }
+                }
+            }
+            return currMaze;
     }
-    vector<int> MazeGenerator::getAdjLabels( int label){
+
+    int MazeGenerator::getRowLength() const{
+        return this->rowLength;
+    }
+    int MazeGenerator::getColumnLength() const{
+        return this->columnLength;
+    }
+    vector<int> MazeGenerator::getAdjLabels( int label) const{
         int labelRow = this->getLabelRow(label);
         int labelColumn = this->getLabelColumn(label);
 
@@ -76,13 +129,13 @@ using namespace std;
         }
         return result;
     }
-    int MazeGenerator::getLabel(int row, int column){
+    int MazeGenerator::getLabel(int row, int column) const{
         return row * this->columnLength + column;
     }
-    int MazeGenerator::getLabelRow(int label){
+    int MazeGenerator::getLabelRow(int label) const{
         return label / this->columnLength;
     }
-    int MazeGenerator::getLabelColumn(int label){
+    int MazeGenerator::getLabelColumn(int label) const{
         return label % this->columnLength;
     }
 

@@ -6,7 +6,6 @@ using namespace std;
 #ifndef MAZEPANE_H
 #define MAZEPANE_H
 
-
 class MazePane: public QGridLayout{
 Q_OBJECT //object macro
 public:
@@ -25,11 +24,12 @@ private:
     int** mazeArr = nullptr;
     int rowLength = ROW_LENGTH;
     int columnLength = COLUMN_LENGTH;
-    bool isMutable = true;
+    bool isMutable = true; //will be used to determine whether user can alternate the slots of the maze
 public:
     MazePane(bool autoGenerate = true);
     ~MazePane();
     void solve();
+    static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
 
 //public slots:
     //void squareClicked(int row, int column);
