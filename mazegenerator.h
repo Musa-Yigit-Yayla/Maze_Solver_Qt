@@ -34,6 +34,10 @@ public:
     int** generateMaze() const;
     int getRowLength() const;
     int getColumnLength() const;
+    int getSourceLValue() const;
+    int getTargetLValue() const;
+    int getWallLValue() const;
+    int getEmptyLValue() const;
     vector<int> getAdjLabels( int label) const;
     int getLabel(int row, int column) const;
     int getLabelRow(int label) const;

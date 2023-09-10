@@ -138,5 +138,18 @@ using namespace std;
     int MazeGenerator::getLabelColumn(int label) const{
         return label % this->columnLength;
     }
+    int MazeGenerator::getSourceLValue() const{
+        return this->sourceLabelValue;
+    }
+    int MazeGenerator::getTargetLValue() const{
+        return this->targetLabelValue;
+    }
+    int MazeGenerator::getWallLValue() const{
+        return this->wallLabelValue;
+    }
+    int MazeGenerator::getEmptyLValue() const{
+        return this->emptyLabelValue;
+    }
+
 
 
