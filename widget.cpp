@@ -13,9 +13,12 @@ Widget::~Widget(){
 
 void Widget::setGenerationSelector(){
     this->generationSelector = new QComboBox(this);
-    this->generationSelector->addItem(Widget::SELF_GENERATE_VALUE, QVariant(1));
-    this->generationSelector->addItem(Widget::AUTO_GENERATE_VALUE, QVariant(2));
-
+    QString s1 = QString::fromStdString(Widget::SELF_GENERATE_VALUE);
+    QString s2 = QString::fromStdString(Widget::AUTO_GENERATE_VALUE);
+    this->generationSelector->addItem(s1, QVariant(1));
+    this->generationSelector->addItem(s2, QVariant(2));
+    //connect the signal of QComboBox to the slot we have created
+    QObject::connect(this->generationSelector, QOverload<int>::of(&QComboBox::currentIndexChanged), this, (&Widget::generationSelectorHandler));
 }
 void Widget::setRadioButtons(){
 
@@ -26,6 +29,9 @@ void Widget::setButtons(){
 //Invoke only once during initialization, from constructor
 void Widget::generateMazes(){
     this->generatedMazes = this->mazeGenerator->generateMazes();
+}
+void Widget::generationSelectorHandler(int){
+
 }
 const string Widget::SELF_GENERATE_VALUE = "Self Generate";
 const string Widget::AUTO_GENERATE_VALUE = "Auto Generate";

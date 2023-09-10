@@ -9,6 +9,8 @@
 #include <QHBoxLayout>
 #include <QVariant>
 #include <string>
+#include <QString>
+#include <QOverload>
 
 #include "mazegenerator.h"
 #include "mazepane.h"
@@ -45,6 +47,6 @@ private:
 signals:
 
 public slots:
-
+    void generationSelectorHandler(int);
 };
 #endif // WIDGET_H
