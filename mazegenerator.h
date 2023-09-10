@@ -7,6 +7,7 @@
 
 #ifndef MAZEGENERATOR_H
 #define MAZEGENERATOR_H
+#include "mazepane.h"
 /**
 * The purpose of this program is to generate a certain number of 2d mazes of certain row and column size which apply to all.
 * Generated mazes will be 2D matrices
@@ -30,7 +31,7 @@ private:
     int wallLabelValue = 0;
 public:
     MazeGenerator(int threshold, int mazeCount, int rowLength, int columnLength, int slv, int tlv, int elv, int wlv);
-    vector<int**> generateMazes() const;
+    vector<int**> generateMazes();
     int** generateMaze() const;
     int getRowLength() const;
     int getColumnLength() const;

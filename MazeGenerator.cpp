@@ -24,11 +24,36 @@ using namespace std;
         }
     }
 
-    vector<int**> MazeGenerator::generateMazes() const{
+    vector<int**> MazeGenerator::generateMazes(){
         vector<int**> result;
-        for(int i = 0; i < this->mazeCount; i++){
-
+        int generatedMazeCount = 0;
+        this->isThresholdSatisfied = false;
+        while(generatedMazeCount < this->mazeCount){
+            int** currMaze = this->generateMaze();
+            if(!this->isThresholdSatisfied){
+                //generate a valid traversable maze
+                if(MazePane::isTraversable(currMaze, this->rowLength, this->columnLength)){
+                    result.push_back(currMaze);
+                    generatedMazeCount++;
+                    if(generatedMazeCount == this->threshold){
+                        this->isThresholdSatisfied = true;
+                    }
+                }
+                else{
+                    //deallocate the currMaze and continue
+                    for(int i = 0; i < this->rowLength; i++){
+                        delete[] currMaze[i];
+                    }
+                    delete[] currMaze;
+                }
+            }
+            else{
+                //generate regardless of traversability
+                result.push_back(currMaze);
+                generatedMazeCount++;
+            }
         }
+        return result;
     }
     //Generates a single maze and returns the pointer to it
     int** MazeGenerator::generateMaze() const{

@@ -59,9 +59,60 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
                 break;
             }
         }
+        if(sourceFound && targetFound){
+            //create an adjacency list from the givenMaze and apply dfs to check whether we can solve the maze
+            vector<vector<int>> adjList;
+            for(int i = 0; i < mazeLength; i++){
+                for(int j = 0; j < columnLength; j++){
+                    int currLabel = mg.getLabel(i, j);
+                    vector<int> currAdj;
+                    if(givenMaze[i][j] != MazePane::WALL_GRID_VALUE){
+                        currAdj = mg.getAdjLabels(currLabel);
+                    }
+                    adjList.push_back(currAdj);
+                }
+            }
+            //notice that adjList also contains walls as adjacent labels to moveable labels
+            //apply iterative dfs algorithm
+            bool visit[mazeLength * columnLength];
+            for(int i = 0; i < mazeLength * columnLength; i++){
+                int currLabelRow = mg.getLabelRow(i);
+                int currLabelColumn = mg.getLabelColumn(i);
+                if(givenMaze[currLabelRow][currLabelColumn] == MazePane::WALL_GRID_VALUE){
+                    visit[i] = true;
+                }
+                else{
+                    visit[i] = false;
+                }
+            }
+            stack<int> s;
+            //mark the source vertex as visited and push it onto the stack
+            visit[sourceLabel] = true;
+            s.push(sourceLabel);
+            while(!s.empty()){
+                int top = s.top();
+                s.pop();
+
+                vector<int> currAdj = adjList.at(top);
+                vector<int> validAdj;
+                for(int adjLabel: currAdj){
+                    if(adjLabel == MazePane::EMPTY_GRID_VALUE || adjLabel == targetLabel){
+                        validAdj.push_back(adjLabel);
+                    }
+                }
+                for(int validLabel: validAdj){
+                    if(validLabel == targetLabel){
+                        //If the given maze is traversable this block will be executed eventually
+                        //return true
+                        return true;
+                    }
+                    else if(!visit[validLabel]){
+                        visit[validLabel] = true;
+                        s.push(validLabel);
+                    }
+                }
+            }
+        }
     }
-    if(sourceFound && targetFound){
-        //create and adjacency list from the givenMaze and apply dfs to check whether we can solve the maze
-        vector<int, int>
-    }
+    return result;
 }

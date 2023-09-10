@@ -1,6 +1,6 @@
 #include <cstddef>
 #include <QGridLayout>
-
+#include <stack>
 
 using namespace std;
 #ifndef MAZEPANE_H
