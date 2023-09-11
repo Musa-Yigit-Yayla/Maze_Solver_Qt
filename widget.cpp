@@ -59,12 +59,13 @@ void Widget::setRadioButtons(){
     this->radioButtonGroup->addButton(this->btSetSource, 2);
     this->radioButtonGroup->addButton(this->btSetTarget, 3);
     QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::solveHandler));
-    QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::regenerateHandler));
+
 }
 void Widget::setButtons(){
     this->btSolve = new QPushButton("Solve");
     this->btRegenerate = new QPushButton("Regenerate");
     QObject::connect(this->btSolve, (&QPushButton::clicked), this, (&Widget::solveHandler));
+    QObject::connect(this->btRegenerate, (&QPushButton::clicked), this, (&Widget::regenerateHandler));
 }
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
@@ -81,6 +82,9 @@ void Widget::generationSelectorHandler(int selectionIndex){
     else if(selectionIndex == 1){//auto generate
 
     }
+}
+string Widget::getSelectedRadioButton() const{
+
 }
 void Widget::solveHandler(bool checked){
     if(this->currMaze != NULL){

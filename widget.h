@@ -50,6 +50,7 @@ private:
 public:
     Widget(QWidget *parent = nullptr);
     static int** getGeneratedMaze(); //return by copy
+    string getSelectedRadioButton() const;
     ~Widget();
 private:
     void generateMazes();

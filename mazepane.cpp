@@ -7,7 +7,8 @@ MazePane::MazePane(bool autoGenerate){
         this->mazeArr = Widget::getGeneratedMaze();
     }
     else{
-
+        //generate empty maze for editing by user
+        this->setDefaultMaze();
     }
     this->drawMazePane();
 }
@@ -123,13 +124,15 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
     }
     return result;
 }
-//Draws the whole maze
+//Draws the whole maze from scratch based on the current mazeArr
 void MazePane::drawMazePane(){
+    if(this->mazeArr != NULL){
 
+    }
 }
 //Sets the current maze as an empty maze to be edited by user, which has target as label 0 and destination as last label and rest as empty
 //Does not draw the maze, only sets the int** mazeArr datafield
-void MazePane::setDefaultmaze(){
+void MazePane::setDefaultMaze(){
     if(this->mazeArr != NULL){
         for(int i = 0; i < this->rowLength; i++){
             delete[] this->mazeArr[i];

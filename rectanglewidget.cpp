@@ -1,8 +1,15 @@
 #include "rectanglewidget.h"
+#include "widget.h"
+#include <iostream>
 
-RectangleWidget::RectangleWidget(QWidget* parent){
+using namespace std;
+
+RectangleWidget::RectangleWidget(int state, QWidget* parent){
     this->parent = parent;
-    //state is initially set to 0
+    if(state < 0 || state > 4){
+        state = 0;
+    }
+    this->state = state;
     this->color = new QColor(RectangleWidget::generateColor(this->state));
     //paint the rectangle manually
     this->setColor(this->color);
@@ -90,8 +97,17 @@ void RectangleWidget::handleStateChange(const int state){
     this->setState(state); //sets the new state, updates the color and repaints the widget
 }
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
-    int nextState;
-    emit stateChanged();
+    //we determine the next state based on the current radio button selection
+    if(this->parent != NULL){
+        Widget* container = reinterpret_cast<Widget*>(this->parent->parentWidget());
+        QRadioButton* selectedRadioBt =
+        int nextState;
+        emit stateChanged(nextState);
+    }
+    else{
+        cout <<
+    }
+
 }
 
 const vector<QColor> RectangleWidget::DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), QColor(25, 25, 112), QColor(72, 61, 139), QColor(65, 105, 225), QColor(75, 0, 139)};

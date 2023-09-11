@@ -35,7 +35,7 @@ public:
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
-    void setDefaultmaze();
+    void setDefaultMaze();
 
 //public slots:
     //void squareClicked(int row, int column);
