@@ -1,4 +1,6 @@
 #include "widget.h"
+#include "mazegenerator.h"
+#include "mazepane.h"
 
 Widget::Widget(QWidget *parent){ //: QWidget(parent){
     this->setParent(parent);
@@ -13,9 +15,9 @@ Widget::~Widget(){
 
 }
 //Caller is responsible of proper deallocation of the returned maze
-int** Widget::getGeneratedMaze() const{
-    int generatedIndex = rand() % this->generatedMazes.size();
-    int** originalMaze = this->generatedMazes.at(generatedIndex);
+int** Widget::getGeneratedMaze(){
+    int generatedIndex = rand() % generatedMazes.size();
+    int** originalMaze = generatedMazes.at(generatedIndex);
     int** mazeCopy = new int*[MazePane::ROW_LENGTH];
     for(int i = 0; i < MazePane::ROW_LENGTH; i++){
         mazeCopy[i] = new int[MazePane::COLUMN_LENGTH];
@@ -65,8 +67,10 @@ void Widget::setButtons(){
     QObject::connect(this->btSolve, (&QPushButton::clicked), this, (&Widget::solveHandler));
 }
 //Invoke only once during initialization, from constructor
+//Selects an auto generated maze initially
 void Widget::generateMazes(){
-    this->generatedMazes = this->mazeGenerator->generateMazes();
+    generatedMazes = this->mazeGenerator->generateMazes();
+    this->currMaze = new MazePane(true);
 }
 void Widget::generationSelectorHandler(int selectionIndex){
     //o based indexing

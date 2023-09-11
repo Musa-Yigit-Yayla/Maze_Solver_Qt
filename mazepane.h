@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <QGridLayout>
 #include <stack>
+#include "widget.h"
 
 using namespace std;
 #ifndef MAZEPANE_H
@@ -32,6 +33,9 @@ public:
     void solve();
     int** getMazeCopy() const;
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
+private:
+    void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
+    void setDefaultmaze();
 
 //public slots:
     //void squareClicked(int row, int column);

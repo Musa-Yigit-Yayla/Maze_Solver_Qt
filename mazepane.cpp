@@ -3,8 +3,13 @@
 
 MazePane::MazePane(bool autoGenerate){
     if(autoGenerate){
+        //select a pregenerated maze
+        this->mazeArr = Widget::getGeneratedMaze();
+    }
+    else{
 
     }
+    this->drawMazePane();
 }
 MazePane::~MazePane(){
 
@@ -117,4 +122,28 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
         }
     }
     return result;
+}
+//Draws the whole maze
+void MazePane::drawMazePane(){
+
+}
+//Sets the current maze as an empty maze to be edited by user, which has target as label 0 and destination as last label and rest as empty
+//Does not draw the maze, only sets the int** mazeArr datafield
+void MazePane::setDefaultmaze(){
+    if(this->mazeArr != NULL){
+        for(int i = 0; i < this->rowLength; i++){
+            delete[] this->mazeArr[i];
+        }
+        delete[] this->mazeArr;
+        this->mazeArr = nullptr;
+    }
+    this->mazeArr = new int*[MazePane::ROW_LENGTH];
+    for(int i = 0; i < this->columnLength; i++){
+        for(int j = 0; j < this->columnLength; j++){
+            mazeArr[i][j] = EMPTY_GRID_VALUE;
+        }
+    }
+    //set the source and target manually
+    mazeArr[0][0] = START_POS_VALUE;
+    mazeArr[this->rowLength - 1][this->columnLength - 1] = TARGET_POS_VALUE;
 }

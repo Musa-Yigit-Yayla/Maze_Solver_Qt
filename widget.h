@@ -1,5 +1,3 @@
-#ifndef WIDGET_H
-#define WIDGET_H
 
 #include <QWidget>
 #include <QComboBox>
@@ -13,9 +11,13 @@
 #include <QString>
 #include <QOverload>
 
-#include "mazegenerator.h"
-#include "mazepane.h"
+//#include "mazegenerator.h"
+//#include "mazepane.h"
+#ifndef WIDGET_H
+#define WIDGET_H
 
+class MazePane;
+class MazeGenerator;
 using namespace std;
 //main container which will act like a scene
 class Widget : public QWidget{
@@ -44,10 +46,10 @@ private:
 
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
-    vector<int**> generatedMazes;
+    static vector<int**> generatedMazes;
 public:
     Widget(QWidget *parent = nullptr);
-    int** getGeneratedMaze() const; //return by copy
+    static int** getGeneratedMaze(); //return by copy
     ~Widget();
 private:
     void generateMazes();

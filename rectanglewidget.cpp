@@ -90,7 +90,7 @@ void RectangleWidget::handleStateChange(const int state){
     this->setState(state); //sets the new state, updates the color and repaints the widget
 }
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
-    int nextState
+    int nextState;
     emit stateChanged();
 }
 
