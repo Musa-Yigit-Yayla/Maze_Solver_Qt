@@ -9,8 +9,8 @@ using namespace std;
 class MazePane: public QGridLayout{
 Q_OBJECT //object macro
 public:
-    static const int ROW_LENGTH = 62;
-    static const int COLUMN_LENGTH = 36;
+    static const int ROW_LENGTH = 36;
+    static const int COLUMN_LENGTH = 62;
     static const int EMPTY_GRID_VALUE = 0;
     static const int VISITED_GRID_VALUE = 1;
     static const int WALL_GRID_VALUE = 2;
@@ -25,6 +25,7 @@ private:
     int sourceLabelPos = 0;
     int targetLabelPos = this->rowLength * this->columnLength - 1;
     bool isMutable = true; //will be used to determine whether user can alternate the slots of the maze
+
 public:
     MazePane(bool autoGenerate = true);
     ~MazePane();

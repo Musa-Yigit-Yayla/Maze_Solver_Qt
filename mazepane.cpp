@@ -2,7 +2,9 @@
 #include "mazegenerator.h"
 
 MazePane::MazePane(bool autoGenerate){
+    if(autoGenerate){
 
+    }
 }
 MazePane::~MazePane(){
 
