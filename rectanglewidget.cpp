@@ -4,7 +4,8 @@
 
 using namespace std;
 
-RectangleWidget::RectangleWidget(int state, QWidget* parent){
+//mazePane argument has a default value of nullptr unless anything has been provided during instantiation call
+RectangleWidget::RectangleWidget(int state, QWidget* parent, MazePane* mazePane){
     this->parent = parent;
     if(state < 0 || state > 4){
         state = 0;
@@ -53,7 +54,7 @@ void RectangleWidget::setState(const int state){
         case FAILED_STATE: this->state = state; break;
         default: this->state = 0;
     }
-        newColor = new QColor(RectangleWidget::generateColor(this->state));
+    newColor = new QColor(RectangleWidget::generateColor(this->state));
     this->setColor(newColor);
 } //invalid value sets the rectangle to an empty path
 int RectangleWidget::getState() const{
@@ -90,8 +91,29 @@ QColor RectangleWidget::generateColor(int state){
 }
 //Signal which will be emitted by mouse clicked
 void RectangleWidget::stateChanged(const int state){
+    //The main logic flow for changing the state(color) of our rectangle is as follows
     switch(state){
         case Widget::RADIO_SELECTION_VALUES::RADIO_EMPTY:
+            //If the clicked rectangle represents the source or target location we do not apply any changes
+            if(this->state != Widget::RADIO_SOURCE && this->state != Widget::RADIO_TARGET){
+                //set the current state and color
+                this->setState(state);
+            }
+        break;
+        case Widget::RADIO_WALL:
+            //apply the same procedure we have used for empty radio
+            if(this->state != Widget::RADIO_SOURCE && this->state != Widget::RADIO_TARGET){
+                //set the current state and color
+                this->setState(state);
+            }
+        break;
+        case Widget::RADIO_SOURCE:
+           //if the current state is not source or destination, set this as source and set the previous source as empty grid element
+        if(this->state != Widget::RADIO_SOURCE && this->state != Widget::RADIO_TARGET && this->mazePane != NULL){
+                //retrieve the rectangle which is regarded as the previous source
+                int prevSourceLabel = this->mazePane->getSourceLabel();
+
+        }
     }
 }
 //slot which will handle the state change

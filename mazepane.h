@@ -31,7 +31,10 @@ public:
     MazePane(bool autoGenerate = true);
     ~MazePane();
     void solve();
+    void updateMazeArr(); //updates the maze array wrt rectangles' color
     int** getMazeCopy() const;
+    int getSourceLabel() const; //returns the source value's label
+    int getTargetLabel() const; //returns the target value's label
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update

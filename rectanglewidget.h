@@ -8,6 +8,7 @@
 #include <QSize>
 #include <vector>
 #include <cstdlib>
+#include "mazepane.h"
 /**
  *This class represents a Rectangle which will be used in our Maze program
  *Private data fields will be used for the purpose of the maze traversal program
@@ -42,9 +43,10 @@ private:
     QWidget* parent = nullptr;
     int state = 0;
     QColor* color = nullptr;
+    MazePane* mazePane;
     static string currEditSelection; //set it when a radio button change occurs in the button group of widget.cpp
 public:
-    RectangleWidget(int state, QWidget* parent = nullptr);
+    RectangleWidget(int state, QWidget* parent = nullptr, MazePane* mazePane = nullptr);
     ~RectangleWidget();
     void paintEvent(QPaintEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;

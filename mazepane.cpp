@@ -18,6 +18,15 @@ MazePane::~MazePane(){
 void MazePane::solve(){
 
 }
+//Updates the mazeArr with respect to current colors of rectangles
+void MazePane::updateMazeArr(){
+    for(int i = 0; i < this->rowLength; i++){
+        for(int j = 0; j < this->columnLength; j++){
+            QLayoutItem* item = this->itemAtPosition(i, j);
+            RectangleWidget* currRect = reinterpret_cast<RectangleWidget*>(item);
+        }
+    }
+}
 //Returns a deep copy of the current maze
 //User is responsible of deallocating the returned copy of the maze
 int** MazePane::getMazeCopy() const{
@@ -33,6 +42,40 @@ int** MazePane::getMazeCopy() const{
     }
     return result;
 
+}
+//Returns based on the mazeArr, therefore you must keep mazeArr updated during program execution
+//Returns -1 if source does not exist
+int MazePane::getSourceLabel() const{
+    if(this->mazeArr != NULL){
+        for(int i = 0; i < this->rowLength; i++){
+            for(int j = 0; j < this->columnLength; j++){
+                if(this->mazeArr[i][j] == MazePane::START_POS_VALUE){
+                    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                    return mzg.getLabel(i, j);
+                }
+            }
+        }
+    }
+    else{
+        cout << "mazeArr field has been observed as NULL in getSourceLabel" << endl;
+    }
+    return -1;
+}
+int MazePane::getTargetLabel() const{
+    if(this->mazeArr != NULL){
+        for(int i = 0; i < this->rowLength; i++){
+            for(int j = 0; j < this->columnLength; j++){
+                if(this->mazeArr[i][j] == MazePane::TARGET_POS_VALUE){
+                    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                    return mzg.getLabel(i, j);
+                }
+            }
+        }
+    }
+    else{
+        cout << "mazeArr field has been observed as NULL in getTargetLabel" << endl;
+    }
+    return -1;
 }
 //static function to check whether a given maze, which is a valid maze, can be solved
 //given maze is assumed to be valid
@@ -125,6 +168,7 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
     return result;
 }
 //Draws the whole maze from scratch based on the current mazeArr
+//Invoke from constructor
 void MazePane::drawMazePane(){
     if(this->mazeArr != NULL){
 
