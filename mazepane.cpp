@@ -1,5 +1,6 @@
 #include "mazepane.h"
 #include "mazegenerator.h"
+#include "rectanglewidget.h"
 
 MazePane::MazePane(bool autoGenerate){
     if(autoGenerate){
@@ -24,6 +25,9 @@ void MazePane::updateMazeArr(){
         for(int j = 0; j < this->columnLength; j++){
             QLayoutItem* item = this->itemAtPosition(i, j);
             RectangleWidget* currRect = reinterpret_cast<RectangleWidget*>(item);
+            int currState = currRect->getState();
+            //!!!YOU MAY HAVE TO ADD ADDITIONAL SWITCH CONDITIONS INSIDE THE SWITCH STATEMENT SUCH AS VISITED VALUE
+            this->mazeArr[i][j] = currState;
         }
     }
 }
@@ -76,6 +80,67 @@ int MazePane::getTargetLabel() const{
         cout << "mazeArr field has been observed as NULL in getTargetLabel" << endl;
     }
     return -1;
+}
+//Sets the prev source as an empty grid
+//Does not update the whole matrix but just adjusts the source index
+//Given row and column values are assumed to be correct, no validation is performed
+void MazePane::setSourcePos(int row, int column){
+    int prevSourceLabel = this->sourceLabelPos;
+    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+    int prevRow = mzg.getLabelRow(prevSourceLabel);
+    int prevColumn = mzg.getLabelColumn(prevSourceLabel);
+    this->sourceLabelPos = mzg.getLabel(row, column);
+    if(prevSourceLabel != this->sourceLabelPos && this->targetLabelPos != this->sourceLabelPos){
+        this->mazeArr[prevRow][prevColumn] = MazePane::EMPTY_GRID_VALUE;
+        //retrieve the prev source rectangle widget and set its state to an empty path state
+        RectangleWidget* prevSourceRect = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn));
+        prevSourceRect->setState(MazePane::EMPTY_GRID_VALUE);
+        //set the new source rectangle's state
+        RectangleWidget* newSourceRect = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(row, column));
+        this->mazeArr[row][column] = MazePane::START_POS_VALUE;
+        newSourceRect->setState(MazePane::START_POS_VALUE);
+    }
+    else if(this->sourceLabelPos == this->targetLabelPos){
+        //swap the source with target
+        //retrieve the prevSource and target labels
+        RectangleWidget* prevSourceRect = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn)); //set it as target
+        RectangleWidget* prevTargetLabel = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(row, column));
+
+        this->mazeArr[prevRow][prevColumn] = MazePane::TARGET_POS_VALUE;
+        this->mazeArr[row][column] = MazePane::START_POS_VALUE;
+
+        //set the rectangles' state
+        prevSourceRect->setState(RectangleWidget::)
+    }
+    else{
+
+    }
+}
+//Sets the prev target as an empty grid
+//Works in an identical fashion to setSourcePos
+void MazePane::setTargetPos(int row, int column){
+    int prevTargetLabel = this->targetLabelPos;
+    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+    this->targetLabelPos = mzg.getLabel(row, column);
+    if(prevTargetLabel != this->targetLabelPos && this->sourceLabelPos != this->targetLabelPos){
+        int prevRow = mzg.getLabelRow(prevTargetLabel);
+        int prevColumn = mzg.getLabelColumn(prevTargetLabel);
+        this->mazeArr[prevRow][prevColumn] = MazePane::EMPTY_GRID_VALUE;
+        //retrieve the prev source rectangle widget and set its state to an empty path state
+        RectangleWidget* prevTargetRect = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn));
+        prevTargetRect->setState(MazePane::EMPTY_GRID_VALUE);
+        //set the new source rectangle's state
+        RectangleWidget* newTargetRect = reinterpret_cast<RectangleWidget*>(this->itemAtPosition(row, column));
+        this->mazeArr[row][column] = MazePane::TARGET_POS_VALUE;
+        newTargetRect->setState(MazePane::TARGET_POS_VALUE);
+    }
+    else if(this->sourceLabelPos == this->targetLabelPos){
+        //swap the source with target
+    }
+    else{
+        //restore the previous target label position data field and prompt an error message
+        this->targetLabelPos = prevTargetLabel;
+    }
 }
 //static function to check whether a given maze, which is a valid maze, can be solved
 //given maze is assumed to be valid

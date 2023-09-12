@@ -51,7 +51,9 @@ void RectangleWidget::setState(const int state){
         case VISITED_STATE:
         case WALL_STATE:
         case SOLUTION_STATE:
-        case FAILED_STATE: this->state = state; break;
+        case FAILED_STATE:
+        case MazePane::START_POS_VALUE:
+        case MazePane::TARGET_POS_VALUE: this->state = state; break;
         default: this->state = 0;
     }
     newColor = new QColor(RectangleWidget::generateColor(this->state));
@@ -84,6 +86,9 @@ QColor RectangleWidget::generateColor(int state){
             result = RectangleWidget::SOLUTION_COLOR; break;
         case FAILED_STATE:
             result = RectangleWidget::RED_COLOR_SET.at(rand() % RED_COLOR_SET.size()); break;
+        case MazePane::START_POS_VALUE:
+
+        case MazePane::TARGET_POS_VALUE:
         default:
             result = RectangleWidget::EMPTY_COLOR; break;
     }
@@ -111,7 +116,7 @@ void RectangleWidget::stateChanged(const int state){
            //if the current state is not source or destination, set this as source and set the previous source as empty grid element
         if(this->state != Widget::RADIO_SOURCE && this->state != Widget::RADIO_TARGET && this->mazePane != NULL){
                 //retrieve the rectangle which is regarded as the previous source
-                int prevSourceLabel = this->mazePane->getSourceLabel();
+                //int prevSourceLabel = this->mazePane->getSourceLabel();
 
         }
     }
