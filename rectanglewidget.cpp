@@ -90,7 +90,9 @@ QColor RectangleWidget::generateColor(int state){
 }
 //Signal which will be emitted by mouse clicked
 void RectangleWidget::stateChanged(const int state){
-
+    switch(state){
+        case Widget::RADIO_SELECTION_VALUES::RADIO_EMPTY:
+    }
 }
 //slot which will handle the state change
 void RectangleWidget::handleStateChange(const int state){
@@ -98,16 +100,12 @@ void RectangleWidget::handleStateChange(const int state){
 }
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
     //we determine the next state based on the current radio button selection
-    if(this->parent != NULL){
-        Widget* container = reinterpret_cast<Widget*>(this->parent->parentWidget());
-        QRadioButton* selectedRadioBt =
-        int nextState;
-        emit stateChanged(nextState);
-    }
-    else{
-        cout <<
-    }
+    //if(this->parent != NULL){
+        //Widget* container = reinterpret_cast<Widget*>(this->parent->parentWidget());
 
+        int nextState = Widget::getRadioSelection();
+        emit stateChanged(nextState);
+    //}
 }
 
 const vector<QColor> RectangleWidget::DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), QColor(25, 25, 112), QColor(72, 61, 139), QColor(65, 105, 225), QColor(75, 0, 139)};

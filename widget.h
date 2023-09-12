@@ -15,7 +15,10 @@
 //#include "mazepane.h"
 #ifndef WIDGET_H
 #define WIDGET_H
-
+/**
+ *High-level container class for maze traversal app
+ *This class must have one and only one instance during run-time due to use of static fields for increasing accessability
+ */
 class MazePane;
 class MazeGenerator;
 using namespace std;
@@ -27,6 +30,7 @@ public:
     static const int TRAVERSABLE_MAZE_THRESHOLD = 20;
     static const string SELF_GENERATE_VALUE;
     static const string AUTO_GENERATE_VALUE;
+    enum RADIO_SELECTION_VALUES{RADIO_WALL, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
 
     //ui constants
     static const int RADIO_BUTTON_HOLDER_SPACING = 40;
@@ -47,10 +51,12 @@ private:
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
     static vector<int**> generatedMazes;
+    static int currRadioSelection;
 public:
     Widget(QWidget *parent = nullptr);
     static int** getGeneratedMaze(); //return by copy
-    string getSelectedRadioButton() const;
+    static int getRadioSelection();
+    //string getSelectedRadioButton() const;
     ~Widget();
 private:
     void generateMazes();
@@ -64,5 +70,6 @@ public slots:
     //void radioButtonToggleHandler(QAbstractButton *button, bool checked);
     void solveHandler(bool checked = true);
     void regenerateHandler(bool checked = true);
+    void radioButtonHandler(QAbstractButton *button, bool checked);
 };
 #endif // WIDGET_H

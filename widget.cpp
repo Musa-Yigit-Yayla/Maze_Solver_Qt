@@ -27,6 +27,10 @@ int** Widget::getGeneratedMaze(){
     }
     return mazeCopy;
 }
+//Static function to retrieve the current radio button selection
+int Widget::getRadioSelection(){
+    return Widget::currRadioSelection;
+}
 void Widget::setGenerationSelector(){
     this->generationSelector = new QComboBox(this);
     QString s1 = QString::fromStdString(Widget::SELF_GENERATE_VALUE);
@@ -58,7 +62,7 @@ void Widget::setRadioButtons(){
     this->radioButtonGroup->addButton(this->btAddEmpty, 1);
     this->radioButtonGroup->addButton(this->btSetSource, 2);
     this->radioButtonGroup->addButton(this->btSetTarget, 3);
-    QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::solveHandler));
+    QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::radioButtonHandler));
 
 }
 void Widget::setButtons(){
@@ -83,12 +87,27 @@ void Widget::generationSelectorHandler(int selectionIndex){
 
     }
 }
-string Widget::getSelectedRadioButton() const{
-
-}
+//string Widget::getSelectedRadioButton() const{}
 void Widget::solveHandler(bool checked){
     if(this->currMaze != NULL){
         this->currMaze->solve();
+    }
+}
+void Widget::radioButtonHandler(QAbstractButton* button, bool checked){
+    if(button == this->btAddEmpty){
+        Widget::currRadioSelection = Widget::RADIO_SELECTION_VALUES::RADIO_EMPTY;
+    }
+    else if(button == this->btAddWall){
+        Widget::currRadioSelection = Widget::RADIO_SELECTION_VALUES::RADIO_WALL;
+    }
+    else if(button == this->btSetSource){
+        Widget::currRadioSelection = Widget::RADIO_SELECTION_VALUES::RADIO_SOURCE;
+    }
+    else if(button == this->btSetTarget){
+        Widget::currRadioSelection = Widget::RADIO_SELECTION_VALUES::RADIO_TARGET;
+    }
+    else{
+        cout << "Error occured during radio button selection regarding pointer comparison" << endl;
     }
 }
 void Widget::regenerateHandler(bool checked){
@@ -97,3 +116,4 @@ void Widget::regenerateHandler(bool checked){
 //void Widget::radioButtonToggleHandler(QAbstractButton* button, bool checked){}
 const string Widget::SELF_GENERATE_VALUE = "Self Generate";
 const string Widget::AUTO_GENERATE_VALUE = "Auto Generate";
+int Widget::currRadioSelection = RADIO_SELECTION_VALUES::RADIO_WALL;
