@@ -39,6 +39,8 @@ public:
     static const QColor WALL_COLOR;
     static const QColor SOLUTION_COLOR;
     static const QColor EMPTY_COLOR;
+    static const QColor SOURCE_COLOR; // yellow
+    static const QColor TARGET_COLOR; //purple
 private:
     QWidget* parent = nullptr;
     int state = 0;
@@ -56,6 +58,8 @@ public:
     int getState() const;
     void setColor(QColor* color); //Will be used for external purposes not in this project's context
     QColor getColor() const; //returns a copy of the current rectangle's color
+    bool isSource() const;
+    bool isTarget() const;
     static QColor generateColor(int state); //based on a given state we will return a color
 signals:
     void stateChanged(const int state);

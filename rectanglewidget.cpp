@@ -87,8 +87,9 @@ QColor RectangleWidget::generateColor(int state){
         case FAILED_STATE:
             result = RectangleWidget::RED_COLOR_SET.at(rand() % RED_COLOR_SET.size()); break;
         case MazePane::START_POS_VALUE:
-
+            result = RectangleWidget::SOURCE_COLOR; break;
         case MazePane::TARGET_POS_VALUE:
+            result = RectangleWidget::TARGET_COLOR; break;
         default:
             result = RectangleWidget::EMPTY_COLOR; break;
     }
@@ -125,6 +126,36 @@ void RectangleWidget::stateChanged(const int state){
 void RectangleWidget::handleStateChange(const int state){
     this->setState(state); //sets the new state, updates the color and repaints the widget
 }
+bool RectangleWidget::isSource() const{
+    bool result = false;
+    if(this->color != NULL){
+        int* currR = nullptr;
+        int* currG = nullptr;
+        int* currB = nullptr;
+        this->color->getRgb(currR, currG, currB);
+        int* sourceR = nullptr;
+        int* sourceG = nullptr;
+        int* sourceB = nullptr;
+        RectangleWidget::SOURCE_COLOR.getRgb(sourceR, sourceG, sourceB);
+        result = ((*currR == *sourceR) && (*currG == *sourceG) && (*currB == *sourceB));
+    }
+    return result;
+}
+bool RectangleWidget::isTarget() const{
+    bool result = false;
+    if(this->color != NULL){
+        int* currR = nullptr;
+        int* currG = nullptr;
+        int* currB = nullptr;
+        this->color->getRgb(currR, currG, currB);
+        int* targetR = nullptr;
+        int* targetG = nullptr;
+        int* targetB = nullptr;
+        RectangleWidget::TARGET_COLOR.getRgb(targetR, targetG, targetB);
+        result = ((*currR == *targetR) && (*currG == *targetG) && (*currB == *targetB));
+    }
+    return result;
+}
 void RectangleWidget::mousePressEvent(QMouseEvent* event){
     //we determine the next state based on the current radio button selection
     //if(this->parent != NULL){
@@ -140,5 +171,6 @@ const vector<QColor> RectangleWidget::RED_COLOR_SET = {QColor(139, 0, 0), QColor
 const QColor RectangleWidget::WALL_COLOR(64, 64, 64);
 const QColor RectangleWidget::SOLUTION_COLOR(50, 205, 50);
 const QColor RectangleWidget::EMPTY_COLOR(255, 87, 51);
-
+const QColor RectangleWidget::SOURCE_COLOR(253, 185, 18);
+const QColor RectangleWidget::TARGET_COLOR(108,29,69);
 

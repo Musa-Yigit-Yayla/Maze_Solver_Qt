@@ -110,7 +110,8 @@ void MazePane::setSourcePos(int row, int column){
         this->mazeArr[row][column] = MazePane::START_POS_VALUE;
 
         //set the rectangles' state
-        prevSourceRect->setState(RectangleWidget::)
+        prevSourceRect->setState(MazePane::TARGET_POS_VALUE);
+        prevTargetLabel->setState(MazePane::START_POS_VALUE);
     }
     else{
 
