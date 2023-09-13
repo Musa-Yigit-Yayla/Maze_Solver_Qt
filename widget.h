@@ -10,6 +10,7 @@
 #include <string>
 #include <QString>
 #include <QOverload>
+#include "circle.h"
 
 //#include "mazegenerator.h"
 //#include "mazepane.h"
@@ -45,9 +46,11 @@ private:
     QPushButton* btRegenerate = nullptr; //regenerate a new maze, will be visible when auto generate is selected from combobox
     QPushButton* btSolve = nullptr;
     QLabel* radioLabel = nullptr; //label for explaining radio button functionalities
+    vector<QLabel*> colorLabels; //labels for explaining colors' meanings
+    static vector<Circle> colorCircles;
 
     QHBoxLayout* radioButtonHolder = nullptr;
-
+    QGridLayout* colorPane = nullptr;
 
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
@@ -65,6 +68,7 @@ private:
     void setGenerationSelector();
     void setRadioButtons();
     void setButtons();
+    void setColorPane();
 signals:
 
 public slots:

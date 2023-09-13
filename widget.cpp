@@ -71,6 +71,10 @@ void Widget::setButtons(){
     QObject::connect(this->btSolve, (&QPushButton::clicked), this, (&Widget::solveHandler));
     QObject::connect(this->btRegenerate, (&QPushButton::clicked), this, (&Widget::regenerateHandler));
 }
+void Widget::setColorPane(){
+    this->colorPane = new QGridLayout(this);
+
+}
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
 void Widget::generateMazes(){

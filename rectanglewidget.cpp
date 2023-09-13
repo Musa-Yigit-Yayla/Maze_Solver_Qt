@@ -33,9 +33,12 @@ void RectangleWidget::paintEvent(QPaintEvent* event){
     }
     this->color = new QColor(RectangleWidget::generateColor(this->state));
     QPainter rectPainter;
-    rectPainter.begin(this);
     QBrush brush(*this->color);
     rectPainter.setBrush(brush);
+    rectPainter.setPen(*this->color);
+    rectPainter.begin(this);
+    rectPainter.drawRect();
+
 }
 void RectangleWidget::setParent(QWidget* parent){
     this->parent = parent;
