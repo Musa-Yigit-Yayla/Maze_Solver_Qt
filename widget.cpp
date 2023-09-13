@@ -16,8 +16,8 @@ Widget::~Widget(){
 }
 //Caller is responsible of proper deallocation of the returned maze
 int** Widget::getGeneratedMaze(){
-    int generatedIndex = rand() % generatedMazes.size();
-    int** originalMaze = generatedMazes.at(generatedIndex);
+    int generatedIndex = rand() % Widget::generatedMazes.size();
+    int** originalMaze = Widget::generatedMazes.at(generatedIndex);
     int** mazeCopy = new int*[MazePane::ROW_LENGTH];
     for(int i = 0; i < MazePane::ROW_LENGTH; i++){
         mazeCopy[i] = new int[MazePane::COLUMN_LENGTH];
@@ -74,7 +74,7 @@ void Widget::setButtons(){
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
 void Widget::generateMazes(){
-    generatedMazes = this->mazeGenerator->generateMazes();
+    Widget::generatedMazes = this->mazeGenerator->generateMazes();
     this->currMaze = new MazePane(true);
 }
 void Widget::generationSelectorHandler(int selectionIndex){
@@ -117,3 +117,4 @@ void Widget::regenerateHandler(bool checked){
 const string Widget::SELF_GENERATE_VALUE = "Self Generate";
 const string Widget::AUTO_GENERATE_VALUE = "Auto Generate";
 int Widget::currRadioSelection = RADIO_SELECTION_VALUES::RADIO_WALL;
+vector<int**> Widget::generatedMazes;

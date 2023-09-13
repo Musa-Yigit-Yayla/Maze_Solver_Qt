@@ -96,8 +96,8 @@ QColor RectangleWidget::generateColor(int state){
     return result;
 }
 //Signal which will be emitted by mouse clicked
-void RectangleWidget::stateChanged(const int state){
-    //The main logic flow for changing the state(color) of our rectangle is as follows
+/*void RectangleWidget::stateChanged(const int state){
+   //The main logic flow for changing the state(color) of our rectangle is as follows
     switch(state){
         case Widget::RADIO_SELECTION_VALUES::RADIO_EMPTY:
             //If the clicked rectangle represents the source or target location we do not apply any changes
@@ -121,7 +121,7 @@ void RectangleWidget::stateChanged(const int state){
 
         }
     }
-}
+}*/
 //slot which will handle the state change
 void RectangleWidget::handleStateChange(const int state){
     this->setState(state); //sets the new state, updates the color and repaints the widget

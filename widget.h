@@ -34,6 +34,7 @@ public:
 
     //ui constants
     static const int RADIO_BUTTON_HOLDER_SPACING = 40;
+
 private:
     QComboBox* generationSelector = nullptr; //will be used to select maze generation procedure
     QRadioButton* btAddWall = nullptr;
@@ -50,8 +51,9 @@ private:
 
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
-    static vector<int**> generatedMazes;
+
     static int currRadioSelection;
+    static vector<int**> generatedMazes;
 public:
     Widget(QWidget *parent = nullptr);
     static int** getGeneratedMaze(); //return by copy
