@@ -11,6 +11,7 @@
 #include <QString>
 #include <QOverload>
 #include "circle.h"
+#include <vector>
 
 //#include "mazegenerator.h"
 //#include "mazepane.h"
@@ -47,7 +48,7 @@ private:
     QPushButton* btSolve = nullptr;
     QLabel* radioLabel = nullptr; //label for explaining radio button functionalities
     vector<QLabel*> colorLabels; //labels for explaining colors' meanings
-    static vector<Circle> colorCircles;
+    vector<Circle> colorCircles;
 
     QHBoxLayout* radioButtonHolder = nullptr;
     QGridLayout* colorPane = nullptr;

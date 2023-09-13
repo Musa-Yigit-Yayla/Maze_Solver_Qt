@@ -37,8 +37,8 @@ void RectangleWidget::paintEvent(QPaintEvent* event){
     rectPainter.setBrush(brush);
     rectPainter.setPen(*this->color);
     rectPainter.begin(this);
-    rectPainter.drawRect();
-
+    rectPainter.drawRect(0, 0, RectangleWidget::RECTANGLE_WIDTH, RectangleWidget::RECTANGLE_HEIGHT); //you may need to alter the first 2 parameters
+    rectPainter.end();
 }
 void RectangleWidget::setParent(QWidget* parent){
     this->parent = parent;

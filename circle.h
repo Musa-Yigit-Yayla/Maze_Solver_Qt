@@ -5,6 +5,8 @@
 #include <QColor>
 #include <QPaintEvent>
 #include <cstddef>
+#include <QPainter>
+#include <QBrush>
 
 /**
  * @brief The Circle class represents a widget containing a circle
@@ -22,6 +24,7 @@ private:
 public:
     explicit Circle(QWidget *parent = nullptr);
     Circle(int r, int g, int b, QWidget* parent = nullptr);
+    Circle(QColor color, QWidget* parent = nullptr);
     void paintEvent(QPaintEvent* event) override;
     void setColor(int r, int g, int b);
     void setColor(QColor* color);

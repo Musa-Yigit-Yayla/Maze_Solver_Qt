@@ -1,6 +1,9 @@
 #include "widget.h"
 #include "mazegenerator.h"
 #include "mazepane.h"
+#include "rectanglewidget.h"
+
+using namespace std;
 
 Widget::Widget(QWidget *parent){ //: QWidget(parent){
     this->setParent(parent);
@@ -9,6 +12,7 @@ Widget::Widget(QWidget *parent){ //: QWidget(parent){
     this->setGenerationSelector();
     this->setRadioButtons();
     this->setButtons();
+    this->setColorPane();
 }
 
 Widget::~Widget(){
@@ -73,6 +77,14 @@ void Widget::setButtons(){
 }
 void Widget::setColorPane(){
     this->colorPane = new QGridLayout(this);
+    this->colorCircles = {Circle(RectangleWidget::SOURCE_COLOR), Circle(RectangleWidget::TARGET_COLOR), Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0)),
+                          Circle(RectangleWidget::SOLUTION_COLOR), Circle(RectangleWidget::RED_COLOR_SET.at(0)), Circle(RectangleWidget::WALL_COLOR),
+                          Circle(RectangleWidget::EMPTY_COLOR)};
+    //set the first row of the colorPane as the circles
+    for(int i = 0; i < this->colorCircles.size(); i++){
+        QLayoutItem* currCircle = this->colorCircles.at(i);
+        this->colorPane->addItem(currCircle, 0, i);
+    }
 
 }
 //Invoke only once during initialization, from constructor
