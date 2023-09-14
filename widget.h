@@ -5,6 +5,8 @@
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QSpacerItem>
 #include <QVariant>
 #include <QLabel>
 #include <string>
@@ -38,6 +40,9 @@ public:
     static const int RADIO_BUTTON_HOLDER_SPACING = 40;
     static const int COLOR_PANE_H_GAP = 10;
     static const int COLOR_PANE_V_GAP = 15;
+    static const int HBOX1_SPACING = 30;
+    static const int HBOX2_SPACING = 30;
+    static const int VERTICAL_BOX_SPACING = 45;
 private:
     QComboBox* generationSelector = nullptr; //will be used to select maze generation procedure
     QRadioButton* btAddWall = nullptr;
@@ -54,8 +59,8 @@ private:
     QHBoxLayout* radioButtonHolder = nullptr;
     QGridLayout* colorPane = nullptr;
     QVBoxLayout* verticalBox = nullptr;
-    QHBoxLayout* hBox1 = nullptr;
-    QHBoxLayout* hBox2 = nullptr;
+    QHBoxLayout* hbox1 = nullptr;
+    QHBoxLayout* hbox2 = nullptr;
 
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
@@ -75,6 +80,8 @@ private:
     void setButtons();
     void setColorPane();
     void setLayoutManagement();
+
+    void btRegenerateSetVisible(bool visible); //set the visibility status for btRegenerate
 signals:
 
 public slots:

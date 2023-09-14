@@ -20,7 +20,28 @@ Widget::~Widget(){
 
 }
 void Widget::setLayoutManagement(){
+    this->verticalBox = new QVBoxLayout(this);
+    //set hbox1
+    this->hbox1 = new QHBoxLayout(this);
+    this->hbox1->addLayout(this->radioButtonHolder);
+    this->hbox1->addWidget(this->btSolve);
+    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum); //this spacer will push the elements preceding it
+    //towards left, add it to the hbox1
+    this->hbox1->addSpacerItem(spacer);
+    this->hbox1->addWidget(this->generationSelector);
+    this->hbox1->setSpacing(Widget::HBOX1_SPACING);
+    //set hbox2
+    this->hbox2 = new QHBoxLayout(this);
+    this->hbox2->addLayout(this->colorPane);
+    this->hbox2->addWidget(this->btRegenerate); //btRegen is visible initially
+    this->hbox2->setSpacing(Widget::HBOX2_SPACING);
 
+    this->verticalBox->addLayout(this->hbox1);
+    this->verticalBox->addLayout(this->hbox2);
+    this->verticalBox->addSpacing(Widget::VERTICAL_BOX_SPACING);
+
+    //add the vertical box to the widget itself
+    this->setLayout(this->verticalBox);
 }
 //Caller is responsible of proper deallocation of the returned maze
 int** Widget::getGeneratedMaze(){
@@ -70,8 +91,15 @@ void Widget::setRadioButtons(){
     this->radioButtonGroup->addButton(this->btAddEmpty, 1);
     this->radioButtonGroup->addButton(this->btSetSource, 2);
     this->radioButtonGroup->addButton(this->btSetTarget, 3);
+    //connect using appropriate signals and slots
     QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::radioButtonHandler));
-
+    //set the layout and ui elements
+    this->radioButtonHolder = new QHBoxLayout(this);
+    this->radioButtonHolder->addWidget(this->btAddWall);
+    this->radioButtonHolder->addWidget(this->btAddEmpty);
+    this->radioButtonHolder->addWidget(this->btSetSource);
+    this->radioButtonHolder->addWidget(this->btSetTarget);
+    this->radioButtonHolder->addSpacing(Widget::RADIO_BUTTON_HOLDER_SPACING);
 }
 void Widget::setButtons(){
     this->btSolve = new QPushButton("Solve");
@@ -99,6 +127,11 @@ void Widget::setColorPane(){
     }
     this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
     this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);
+}
+//Makes the btRegenerate visible if @param visible is true
+//Else makes it invisible
+void btRegenerateSetVisible(bool visible){
+
 }
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
