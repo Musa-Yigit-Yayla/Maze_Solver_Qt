@@ -36,7 +36,8 @@ public:
 
     //ui constants
     static const int RADIO_BUTTON_HOLDER_SPACING = 40;
-
+    static const int COLOR_PANE_H_GAP = 10;
+    static const int COLOR_PANE_V_GAP = 15;
 private:
     QComboBox* generationSelector = nullptr; //will be used to select maze generation procedure
     QRadioButton* btAddWall = nullptr;
@@ -47,11 +48,14 @@ private:
     QPushButton* btRegenerate = nullptr; //regenerate a new maze, will be visible when auto generate is selected from combobox
     QPushButton* btSolve = nullptr;
     QLabel* radioLabel = nullptr; //label for explaining radio button functionalities
-    vector<QLabel*> colorLabels; //labels for explaining colors' meanings
+    vector<QLabel> colorLabels; //labels for explaining colors' meanings
     vector<Circle> colorCircles;
 
     QHBoxLayout* radioButtonHolder = nullptr;
     QGridLayout* colorPane = nullptr;
+    QVBoxLayout* verticalBox = nullptr;
+    QHBoxLayout* hBox1 = nullptr;
+    QHBoxLayout* hBox2 = nullptr;
 
     MazeGenerator* mazeGenerator = nullptr;
     MazePane* currMaze = nullptr;
@@ -70,6 +74,7 @@ private:
     void setRadioButtons();
     void setButtons();
     void setColorPane();
+    void setLayoutManagement();
 signals:
 
 public slots:

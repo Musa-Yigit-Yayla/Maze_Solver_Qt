@@ -13,9 +13,13 @@ Widget::Widget(QWidget *parent){ //: QWidget(parent){
     this->setRadioButtons();
     this->setButtons();
     this->setColorPane();
+    this->setLayoutManagement();
 }
 
 Widget::~Widget(){
+
+}
+void Widget::setLayoutManagement(){
 
 }
 //Caller is responsible of proper deallocation of the returned maze
@@ -80,12 +84,21 @@ void Widget::setColorPane(){
     this->colorCircles = {Circle(RectangleWidget::SOURCE_COLOR), Circle(RectangleWidget::TARGET_COLOR), Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0)),
                           Circle(RectangleWidget::SOLUTION_COLOR), Circle(RectangleWidget::RED_COLOR_SET.at(0)), Circle(RectangleWidget::WALL_COLOR),
                           Circle(RectangleWidget::EMPTY_COLOR)};
+    this->colorLabels = {QLabel(QString::fromStdString("Start Cell")), QLabel(QString::fromStdString("Target Cell")), QLabel(QString::fromStdString("Visited")),
+                         QLabel(QString::fromStdString("Solution Path")), QLabel(QString::fromStdString("Failed Path")), QLabel(QString::fromStdString("Wall")),
+                         QLabel(QString::fromStdString("Empty Cell"))};
     //set the first row of the colorPane as the circles
     for(int i = 0; i < this->colorCircles.size(); i++){
-        QLayoutItem* currCircle = this->colorCircles.at(i);
-        this->colorPane->addItem(currCircle, 0, i);
+        Circle* currCircle = &(this->colorCircles.at(i));
+        this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currCircle), 0, i);
     }
-
+    //set the second row as the labels
+    for(int i = 0; i < this->colorLabels.size(); i++){
+        QLabel* currLabel = &(this->colorLabels.at(i));
+        this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
+    }
+    this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
+    this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);
 }
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
@@ -100,7 +113,7 @@ void Widget::generationSelectorHandler(int selectionIndex){
 
     }
     else if(selectionIndex == 1){//auto generate
-
+        //when auto generate is enabled remove the regenerate button from its container and re-add it during the other selection
     }
 }
 //string Widget::getSelectedRadioButton() const{}
