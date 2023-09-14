@@ -2,18 +2,21 @@
 #include "mazegenerator.h"
 #include "mazepane.h"
 #include "rectanglewidget.h"
+#include <iostream>
 
 using namespace std;
 
 Widget::Widget(QWidget *parent){ //: QWidget(parent){
+    cout << "Widget constructor invoked" << endl;
     this->setParent(parent);
     this->mazeGenerator = new MazeGenerator(Widget::TRAVERSABLE_MAZE_THRESHOLD, Widget::AUTO_GENERATED_MAZE_COUNT, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, MazePane::START_POS_VALUE, MazePane::TARGET_POS_VALUE, MazePane::EMPTY_GRID_VALUE, MazePane::WALL_GRID_VALUE);
-    this->generateMazes();
+    this->generateMazes(); //problem occurs here
     this->setGenerationSelector();
     this->setRadioButtons();
     this->setButtons();
     this->setColorPane();
     this->setLayoutManagement();
+    cout << "Widget constructor exited" << endl;
 }
 
 Widget::~Widget(){
@@ -109,20 +112,40 @@ void Widget::setButtons(){
 }
 void Widget::setColorPane(){
     this->colorPane = new QGridLayout(this);
-    this->colorCircles = {Circle(RectangleWidget::SOURCE_COLOR), Circle(RectangleWidget::TARGET_COLOR), Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0)),
+
+    //this->colorCircles.push_back(Circle(RectangleWidget::SOURCE_COLOR));
+    Circle* c1 = new Circle(RectangleWidget::SOURCE_COLOR);
+    Circle* c2 = new Circle(RectangleWidget::TARGET_COLOR);
+    Circle* c3 = new Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0));
+    Circle* c4 = new Circle(RectangleWidget::SOLUTION_COLOR);
+    Circle* c5 = new Circle(RectangleWidget::RED_COLOR_SET.at(0));
+    Circle* c6 = new Circle(RectangleWidget::WALL_COLOR);
+
+    this->colorCircles = {c1, c2, c3, c4, c5, c6};
+    /*this->colorCircles = {Circle(RectangleWidget::SOURCE_COLOR), Circle(RectangleWidget::TARGET_COLOR), Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0)),
                           Circle(RectangleWidget::SOLUTION_COLOR), Circle(RectangleWidget::RED_COLOR_SET.at(0)), Circle(RectangleWidget::WALL_COLOR),
-                          Circle(RectangleWidget::EMPTY_COLOR)};
-    this->colorLabels = {QLabel(QString::fromStdString("Start Cell")), QLabel(QString::fromStdString("Target Cell")), QLabel(QString::fromStdString("Visited")),
+                          Circle(RectangleWidget::EMPTY_COLOR)};*/
+
+    QLabel* l1 = new QLabel(QString::fromStdString("Start Cell"));
+    QLabel* l2 = new QLabel(QString::fromStdString("Target Cell"));
+    QLabel* l3 = new QLabel(QString::fromStdString("Visited"));
+    QLabel* l4 = new QLabel(QString::fromStdString("Solution Path"));
+    QLabel* l5 = new QLabel(QString::fromStdString("Failed Path"));
+    QLabel* l6 = new QLabel(QString::fromStdString("Wall"));
+    QLabel* l7 = new QLabel(QString::fromStdString("Empty Cell"));
+
+    /*this->colorLabels = {QLabel(QString::fromStdString("Start Cell")), QLabel(QString::fromStdString("Target Cell")), QLabel(QString::fromStdString("Visited")),
                          QLabel(QString::fromStdString("Solution Path")), QLabel(QString::fromStdString("Failed Path")), QLabel(QString::fromStdString("Wall")),
-                         QLabel(QString::fromStdString("Empty Cell"))};
+                         QLabel(QString::fromStdString("Empty Cell"))};*/
+    this->colorLabels = {l1, l2, l3, l4, l5, l6, l7};
     //set the first row of the colorPane as the circles
     for(int i = 0; i < this->colorCircles.size(); i++){
-        Circle* currCircle = &(this->colorCircles.at(i));
+        Circle* currCircle = (this->colorCircles.at(i));
         this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currCircle), 0, i);
     }
     //set the second row as the labels
     for(int i = 0; i < this->colorLabels.size(); i++){
-        QLabel* currLabel = &(this->colorLabels.at(i));
+        QLabel* currLabel = (this->colorLabels.at(i));
         this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
     }
     this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);

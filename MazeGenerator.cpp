@@ -27,8 +27,8 @@ using namespace std;
     vector<int**> MazeGenerator::generateMazes(){
         vector<int**> result;
         int generatedMazeCount = 0;
-        this->isThresholdSatisfied = false;
         while(generatedMazeCount < this->mazeCount){
+            cout << "generateMaze main loop" << endl;
             int** currMaze = this->generateMaze();
             if(!this->isThresholdSatisfied){
                 //generate a valid traversable maze

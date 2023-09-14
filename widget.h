@@ -31,7 +31,7 @@ class Widget : public QWidget{
     Q_OBJECT
 public:
     static const int AUTO_GENERATED_MAZE_COUNT = 50;
-    static const int TRAVERSABLE_MAZE_THRESHOLD = 20;
+    static const int TRAVERSABLE_MAZE_THRESHOLD = 0;
     static const string SELF_GENERATE_VALUE;
     static const string AUTO_GENERATE_VALUE;
     enum RADIO_SELECTION_VALUES{RADIO_WALL, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
@@ -53,8 +53,8 @@ private:
     QPushButton* btRegenerate = nullptr; //regenerate a new maze, will be visible when auto generate is selected from combobox
     QPushButton* btSolve = nullptr;
     QLabel* radioLabel = nullptr; //label for explaining radio button functionalities
-    vector<QLabel> colorLabels; //labels for explaining colors' meanings
-    vector<Circle> colorCircles;
+    vector<QLabel*> colorLabels; //labels for explaining colors' meanings
+    vector<Circle*> colorCircles;
 
     QHBoxLayout* radioButtonHolder = nullptr;
     QGridLayout* colorPane = nullptr;
