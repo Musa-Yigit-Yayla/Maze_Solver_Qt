@@ -25,18 +25,19 @@ Widget::~Widget(){
 
 }
 void Widget::setLayoutManagement(){
-    this->verticalBox = new QVBoxLayout(this);
+    //this->verticalBox = new QVBoxLayout(this);
     //set hbox1
-    this->hbox1 = new QHBoxLayout(this);
+    this->hbox1 = new QHBoxLayout();
     this->hbox1->addLayout(this->radioButtonHolder);
     this->hbox1->addWidget(this->btSolve);
     //QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum); //this spacer will push the elements preceding it
     //towards left, add it to the hbox1
     //this->hbox1->addSpacerItem(spacer);
+    this->hbox1->addStretch();
     this->hbox1->addWidget(this->generationSelector);
     this->hbox1->setSpacing(Widget::HBOX1_SPACING);
     //set hbox2
-    this->hbox2 = new QHBoxLayout(this);
+    this->hbox2 = new QHBoxLayout();
     this->hbox2->addLayout(this->colorPane);
     this->hbox2->addWidget(this->btRegenerate); //btRegen is visible initially
     this->hbox2->setSpacing(Widget::HBOX2_SPACING);
@@ -44,7 +45,7 @@ void Widget::setLayoutManagement(){
     this->verticalBox->addLayout(this->hbox1);
     this->verticalBox->addLayout(this->hbox2);
     this->verticalBox->setSpacing(Widget::VERTICAL_BOX_SPACING);
-
+    this->verticalBox->addStretch();
     //add the vertical box to the widget itself
     this->setLayout(this->verticalBox);
 }
@@ -66,7 +67,7 @@ int Widget::getRadioSelection(){
     return Widget::currRadioSelection;
 }
 void Widget::setGenerationSelector(){
-    this->generationSelector = new QComboBox(this);
+    this->generationSelector = new QComboBox();
     QString s1 = QString::fromStdString(Widget::SELF_GENERATE_VALUE);
     QString s2 = QString::fromStdString(Widget::AUTO_GENERATE_VALUE);
     this->generationSelector->addItem(s1, QVariant(1));
@@ -89,11 +90,17 @@ void Widget::setRadioButtons(){
     //QSpacerItem* spacer = new QSpacerItem(40, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
     //this->radioButtonHolder->addSpacerItem(spacer);
     //add the children of holder into the holder itself
+    this->radioLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->radioLabel);
+    this->btAddWall->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btAddWall);
+    this->btAddEmpty->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btAddEmpty);
+    this->btSetSource->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btSetSource);
+    this->btSetTarget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btSetTarget);
+    this->radioButtonHolder->addStretch();
     //add functionality to radio buttons
     this->radioButtonGroup->addButton(this->btAddWall, 0);
     this->radioButtonGroup->addButton(this->btAddEmpty, 1);
@@ -105,7 +112,9 @@ void Widget::setRadioButtons(){
 }
 void Widget::setButtons(){
     this->btSolve = new QPushButton("Solve");
+    this->btSolve->setFixedWidth(Widget::SOLVE_BUTTON_WIDTH);
     this->btRegenerate = new QPushButton("Regenerate");
+    this->btRegenerate->setFixedWidth(Widget::REGENERATE_BUTTON_WIDTH);
     QObject::connect(this->btSolve, (&QPushButton::clicked), this, (&Widget::solveHandler));
     QObject::connect(this->btRegenerate, (&QPushButton::clicked), this, (&Widget::regenerateHandler));
 }

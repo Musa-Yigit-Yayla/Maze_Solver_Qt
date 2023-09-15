@@ -44,6 +44,8 @@ public:
     static const int HBOX1_SPACING = 30;
     static const int HBOX2_SPACING = 30;
     static const int VERTICAL_BOX_SPACING = 45;
+    static const int SOLVE_BUTTON_WIDTH = 40;
+    static const int REGENERATE_BUTTON_WIDTH = 70;
 private:
     QComboBox* generationSelector = nullptr; //will be used to select maze generation procedure
     QRadioButton* btAddWall = nullptr;
@@ -59,7 +61,7 @@ private:
 
     QHBoxLayout* radioButtonHolder = nullptr;
     QGridLayout* colorPane = nullptr;
-    QVBoxLayout* verticalBox = nullptr;
+    QVBoxLayout* verticalBox = new QVBoxLayout(this); //high most level container
     QHBoxLayout* hbox1 = nullptr;
     QHBoxLayout* hbox2 = nullptr;
 
