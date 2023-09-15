@@ -6,8 +6,10 @@
 
 using namespace std;
 
-Widget::Widget(QWidget *parent){ //: QWidget(parent){
+Widget::Widget(QWidget *parent) : QWidget(parent){
     cout << "Widget constructor invoked" << endl;
+    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    qDebug() << "Horizontal Policy:" << this->sizePolicy().horizontalPolicy();
     this->setParent(parent);
     this->mazeGenerator = new MazeGenerator(Widget::TRAVERSABLE_MAZE_THRESHOLD, Widget::AUTO_GENERATED_MAZE_COUNT, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, MazePane::START_POS_VALUE, MazePane::TARGET_POS_VALUE, MazePane::EMPTY_GRID_VALUE, MazePane::WALL_GRID_VALUE);
     this->generateMazes(); //problem occurs here
@@ -28,9 +30,9 @@ void Widget::setLayoutManagement(){
     this->hbox1 = new QHBoxLayout(this);
     this->hbox1->addLayout(this->radioButtonHolder);
     this->hbox1->addWidget(this->btSolve);
-    QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum); //this spacer will push the elements preceding it
+    //QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum); //this spacer will push the elements preceding it
     //towards left, add it to the hbox1
-    this->hbox1->addSpacerItem(spacer);
+    //this->hbox1->addSpacerItem(spacer);
     this->hbox1->addWidget(this->generationSelector);
     this->hbox1->setSpacing(Widget::HBOX1_SPACING);
     //set hbox2
@@ -41,7 +43,7 @@ void Widget::setLayoutManagement(){
 
     this->verticalBox->addLayout(this->hbox1);
     this->verticalBox->addLayout(this->hbox2);
-    this->verticalBox->addSpacing(Widget::VERTICAL_BOX_SPACING);
+    this->verticalBox->setSpacing(Widget::VERTICAL_BOX_SPACING);
 
     //add the vertical box to the widget itself
     this->setLayout(this->verticalBox);
@@ -73,16 +75,19 @@ void Widget::setGenerationSelector(){
     QObject::connect(this->generationSelector, QOverload<int>::of(&QComboBox::currentIndexChanged), this, (&Widget::generationSelectorHandler));
 }
 void Widget::setRadioButtons(){
-    this->btAddWall = new QRadioButton(QString::fromStdString("Wall"), this);
-    this->btAddEmpty = new QRadioButton(QString::fromStdString("Empty"), this);
-    this->btSetSource = new QRadioButton(QString::fromStdString("Source"), this);
-    this->btSetTarget = new QRadioButton(QString::fromStdString("Target"), this);
+    this->btAddWall = new QRadioButton(QString::fromStdString("Wall"));
+    this->btAddEmpty = new QRadioButton(QString::fromStdString("Empty"));
+    this->btSetSource = new QRadioButton(QString::fromStdString("Source"));
+    this->btSetTarget = new QRadioButton(QString::fromStdString("Target"));
     this->radioButtonGroup = new QButtonGroup(this);
 
     //set the label
     this->radioLabel = new QLabel(QString::fromStdString("Cell Editor\n(Cilck on cells)"));
     this->radioButtonHolder = new QHBoxLayout(this);
-    this->radioButtonHolder->setSpacing(Widget::RADIO_BUTTON_HOLDER_SPACING);
+    //this->radioButtonHolder->setSpacing(Widget::RADIO_BUTTON_HOLDER_SPACING);
+    //Create a fixed spacer for the radioButtonHolder
+    //QSpacerItem* spacer = new QSpacerItem(40, 1, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //this->radioButtonHolder->addSpacerItem(spacer);
     //add the children of holder into the holder itself
     this->radioButtonHolder->addWidget(this->radioLabel);
     this->radioButtonHolder->addWidget(this->btAddWall);
@@ -97,12 +102,6 @@ void Widget::setRadioButtons(){
     //connect using appropriate signals and slots
     QObject::connect(this->radioButtonGroup, (&QButtonGroup::buttonToggled), this, (&Widget::radioButtonHandler));
     //set the layout and ui elements
-    this->radioButtonHolder = new QHBoxLayout(this);
-    this->radioButtonHolder->addWidget(this->btAddWall);
-    this->radioButtonHolder->addWidget(this->btAddEmpty);
-    this->radioButtonHolder->addWidget(this->btSetSource);
-    this->radioButtonHolder->addWidget(this->btSetTarget);
-    this->radioButtonHolder->addSpacing(Widget::RADIO_BUTTON_HOLDER_SPACING);
 }
 void Widget::setButtons(){
     this->btSolve = new QPushButton("Solve");
@@ -141,12 +140,13 @@ void Widget::setColorPane(){
     //set the first row of the colorPane as the circles
     for(int i = 0; i < this->colorCircles.size(); i++){
         Circle* currCircle = (this->colorCircles.at(i));
-        this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currCircle), 0, i);
+        this->colorPane->addWidget(dynamic_cast<QWidget*>(currCircle), 0, i);
     }
     //set the second row as the labels
     for(int i = 0; i < this->colorLabels.size(); i++){
         QLabel* currLabel = (this->colorLabels.at(i));
-        this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
+        //this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
+        this->colorPane->addWidget(currLabel, 1, i);
     }
     this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
     this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);

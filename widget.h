@@ -12,6 +12,7 @@
 #include <string>
 #include <QString>
 #include <QOverload>
+#include <QSizePolicy>
 #include "circle.h"
 #include <vector>
 
@@ -37,7 +38,7 @@ public:
     enum RADIO_SELECTION_VALUES{RADIO_WALL, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
 
     //ui constants
-    static const int RADIO_BUTTON_HOLDER_SPACING = 40;
+    static const int RADIO_BUTTON_HOLDER_SPACING = 20;
     static const int COLOR_PANE_H_GAP = 10;
     static const int COLOR_PANE_V_GAP = 15;
     static const int HBOX1_SPACING = 30;
