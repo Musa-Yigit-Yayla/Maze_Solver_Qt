@@ -173,7 +173,7 @@ const vector<QColor> RectangleWidget::DARK_BLUE_COLOR_SET = {QColor(0, 0, 128), 
 const vector<QColor> RectangleWidget::RED_COLOR_SET = {QColor(139, 0, 0), QColor(178, 34, 34), QColor(220, 20, 60), QColor(255, 0, 0), QColor(255, 69, 0)};
 const QColor RectangleWidget::WALL_COLOR(64, 64, 64);
 const QColor RectangleWidget::SOLUTION_COLOR(50, 205, 50);
-const QColor RectangleWidget::EMPTY_COLOR(255, 87, 51);
+const QColor RectangleWidget::EMPTY_COLOR(215, 213, 198);
 const QColor RectangleWidget::SOURCE_COLOR(253, 185, 18);
 const QColor RectangleWidget::TARGET_COLOR(108,29,69);
 

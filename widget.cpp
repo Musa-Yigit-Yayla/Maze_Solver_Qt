@@ -133,8 +133,9 @@ void Widget::setColorPane(){
     Circle* c4 = new Circle(RectangleWidget::SOLUTION_COLOR);
     Circle* c5 = new Circle(RectangleWidget::RED_COLOR_SET.at(0));
     Circle* c6 = new Circle(RectangleWidget::WALL_COLOR);
+    Circle* c7 = new Circle(RectangleWidget::EMPTY_COLOR);
 
-    this->colorCircles = {c1, c2, c3, c4, c5, c6};
+    this->colorCircles = {c1, c2, c3, c4, c5, c6, c7};
     /*this->colorCircles = {Circle(RectangleWidget::SOURCE_COLOR), Circle(RectangleWidget::TARGET_COLOR), Circle(RectangleWidget::DARK_BLUE_COLOR_SET.at(0)),
                           Circle(RectangleWidget::SOLUTION_COLOR), Circle(RectangleWidget::RED_COLOR_SET.at(0)), Circle(RectangleWidget::WALL_COLOR),
                           Circle(RectangleWidget::EMPTY_COLOR)};*/

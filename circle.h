@@ -20,7 +20,7 @@ class Circle : public QWidget{
 public:
     const int DEFAULT_RADIUS_VALUE = 15;
 private:
-    QColor* color = nullptr;
+    QColor color;
     int radius = DEFAULT_RADIUS_VALUE;
 public:
     explicit Circle(QWidget *parent = nullptr);
@@ -29,7 +29,7 @@ public:
     void paintEvent(QPaintEvent* event) override;
     void setColor(int r, int g, int b);
     void setColor(QColor* color);
-    QColor* getColor() const; //returns a copy of the color field
+    QColor getColor() const; //returns a copy of the color field
     void setRadius(int radius);
     int getRadius() const;
 signals:
