@@ -29,7 +29,10 @@ void Widget::setLayoutManagement(){
     //set hbox1
     this->hbox1 = new QHBoxLayout();
     this->hbox1->addLayout(this->radioButtonHolder);
-    this->hbox1->addWidget(this->btSolve);
+    this->radioButtonHolder->addWidget(this->btSolve);
+    this->hbox1->addWidget(this->btRegenerate); //btRegen is visible initially
+    this->radioButtonHolder->addStretch();
+    //this->hbox1->addWidget(this->btSolve);
     //QSpacerItem* spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum); //this spacer will push the elements preceding it
     //towards left, add it to the hbox1
     //this->hbox1->addSpacerItem(spacer);
@@ -39,7 +42,8 @@ void Widget::setLayoutManagement(){
     //set hbox2
     this->hbox2 = new QHBoxLayout();
     this->hbox2->addLayout(this->colorPane);
-    this->hbox2->addWidget(this->btRegenerate); //btRegen is visible initially
+
+    this->hbox2->addStretch(0);
     this->hbox2->setSpacing(Widget::HBOX2_SPACING);
 
     this->verticalBox->addLayout(this->hbox1);
@@ -92,15 +96,16 @@ void Widget::setRadioButtons(){
     //add the children of holder into the holder itself
     this->radioLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->radioLabel);
-    this->btAddWall->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //this->btAddWall->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btAddWall);
-    this->btAddEmpty->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //this->btAddEmpty->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btAddEmpty);
-    this->btSetSource->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //this->btSetSource->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btSetSource);
-    this->btSetTarget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //this->btSetTarget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     this->radioButtonHolder->addWidget(this->btSetTarget);
-    this->radioButtonHolder->addStretch();
+    /*this->radioButtonHolder->addWidget(this->btSolve);
+    this->radioButtonHolder->addStretch();*/
     //add functionality to radio buttons
     this->radioButtonGroup->addButton(this->btAddWall, 0);
     this->radioButtonGroup->addButton(this->btAddEmpty, 1);
@@ -149,14 +154,20 @@ void Widget::setColorPane(){
     //set the first row of the colorPane as the circles
     for(int i = 0; i < this->colorCircles.size(); i++){
         Circle* currCircle = (this->colorCircles.at(i));
-        this->colorPane->addWidget(dynamic_cast<QWidget*>(currCircle), 0, i);
+        currCircle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        //currCircle->setParent(this);
+        this->colorPane->addWidget(currCircle, 0, i);
+        //this->colorPane->addWidget(dynamic_cast<QWidget*>(currCircle), 0, i);
     }
     //set the second row as the labels
     for(int i = 0; i < this->colorLabels.size(); i++){
         QLabel* currLabel = (this->colorLabels.at(i));
         //this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
+        currLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         this->colorPane->addWidget(currLabel, 1, i);
     }
+    this->colorPane->addWidget(this->btRegenerate);
+    //this->colorPane->addStretch();
     this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
     this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);
 }

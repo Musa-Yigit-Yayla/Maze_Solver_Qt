@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <QPainter>
 #include <QBrush>
+#include <QRect>
 
 /**
  * @brief The Circle class represents a widget containing a circle
