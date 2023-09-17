@@ -10,8 +10,8 @@ using namespace std;
 class MazePane: public QGridLayout{
 Q_OBJECT //object macro
 public:
-    static const int ROW_LENGTH = 36;
-    static const int COLUMN_LENGTH = 62;
+    static const int ROW_LENGTH = 12;
+    static const int COLUMN_LENGTH = 16;
     static const int EMPTY_GRID_VALUE = 0;
     static const int VISITED_GRID_VALUE = 1;
     static const int WALL_GRID_VALUE = 2;

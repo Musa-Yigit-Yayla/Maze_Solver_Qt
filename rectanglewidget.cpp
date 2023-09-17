@@ -10,6 +10,7 @@ RectangleWidget::RectangleWidget(int state, QWidget* parent, MazePane* mazePane)
     if(state < 0 || state > 4){
         state = 0;
     }
+    this->mazePane = mazePane;
     this->state = state;
     this->color = new QColor(RectangleWidget::generateColor(this->state));
     //paint the rectangle manually
@@ -19,6 +20,7 @@ RectangleWidget::RectangleWidget(int state, QWidget* parent, MazePane* mazePane)
     int currHeight = RectangleWidget::RECTANGLE_HEIGHT;
     QSize size(currWidth, currHeight);
     this->setFixedSize(size);
+    this->update(); //draw the rectangle
     //connect the signal with the slot for event handling
     QObject::connect(this, (&RectangleWidget::stateChanged), this, (&RectangleWidget::handleStateChange));
 
@@ -33,10 +35,10 @@ void RectangleWidget::paintEvent(QPaintEvent* event){
     }
     this->color = new QColor(RectangleWidget::generateColor(this->state));
     QPainter rectPainter;
+    rectPainter.begin(this);
     QBrush brush(*this->color);
     rectPainter.setBrush(brush);
     rectPainter.setPen(*this->color);
-    rectPainter.begin(this);
     rectPainter.drawRect(0, 0, RectangleWidget::RECTANGLE_WIDTH, RectangleWidget::RECTANGLE_HEIGHT); //you may need to alter the first 2 parameters
     rectPainter.end();
 }
@@ -61,6 +63,7 @@ void RectangleWidget::setState(const int state){
     }
     newColor = new QColor(RectangleWidget::generateColor(this->state));
     this->setColor(newColor);
+    this->update();
 } //invalid value sets the rectangle to an empty path
 int RectangleWidget::getState() const{
     return this->state;

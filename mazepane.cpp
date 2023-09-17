@@ -11,6 +11,8 @@ MazePane::MazePane(bool autoGenerate){
         //generate empty maze for editing by user
         this->setDefaultMaze();
     }
+    this->setHorizontalSpacing(9);
+    this->setVerticalSpacing(0);
     this->drawMazePane();
 }
 MazePane::~MazePane(){
@@ -237,7 +239,16 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
 //Invoke from constructor
 void MazePane::drawMazePane(){
     if(this->mazeArr != NULL){
-
+        for(int i = 0; i < this->rowLength; i++){
+            for(int j = 0; j < this->columnLength; j++){
+                int currState = this->mazeArr[i][j];
+                RectangleWidget* currRect = new RectangleWidget(currState, nullptr, this);
+                this->addWidget(currRect, i, j);
+            }
+        }
+    }
+    else{
+        cout << "Error: Unable to draw mazePane which is null pointer" << endl;
     }
 }
 //Sets the current maze as an empty maze to be edited by user, which has target as label 0 and destination as last label and rest as empty

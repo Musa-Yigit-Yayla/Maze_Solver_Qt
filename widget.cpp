@@ -48,6 +48,7 @@ void Widget::setLayoutManagement(){
 
     this->verticalBox->addLayout(this->hbox1);
     this->verticalBox->addLayout(this->hbox2);
+    this->verticalBox->addLayout(this->currMaze);
     this->verticalBox->setSpacing(Widget::VERTICAL_BOX_SPACING);
     this->verticalBox->addStretch();
     //add the vertical box to the widget itself
@@ -140,13 +141,17 @@ void Widget::setColorPane(){
                           Circle(RectangleWidget::SOLUTION_COLOR), Circle(RectangleWidget::RED_COLOR_SET.at(0)), Circle(RectangleWidget::WALL_COLOR),
                           Circle(RectangleWidget::EMPTY_COLOR)};*/
 
-    QLabel* l1 = new QLabel(QString::fromStdString("Start Cell"));
-    QLabel* l2 = new QLabel(QString::fromStdString("Target Cell"));
+    QLabel* l1 = new QLabel(QString::fromStdString("Start \nCell"));
+    QLabel* l2 = new QLabel(QString::fromStdString("Target \nCell"));
     QLabel* l3 = new QLabel(QString::fromStdString("Visited"));
-    QLabel* l4 = new QLabel(QString::fromStdString("Solution Path"));
-    QLabel* l5 = new QLabel(QString::fromStdString("Failed Path"));
+    QLabel* l4 = new QLabel(QString::fromStdString("Solution \nPath"));
+    QLabel* l5 = new QLabel(QString::fromStdString("Failed \nPath"));
     QLabel* l6 = new QLabel(QString::fromStdString("Wall"));
-    QLabel* l7 = new QLabel(QString::fromStdString("Empty Cell"));
+    QLabel* l7 = new QLabel(QString::fromStdString("Empty \nCell"));
+
+    this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
+    this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);
+    this->colorPane->setContentsMargins(0, 0, 0, 0);
 
     /*this->colorLabels = {QLabel(QString::fromStdString("Start Cell")), QLabel(QString::fromStdString("Target Cell")), QLabel(QString::fromStdString("Visited")),
                          QLabel(QString::fromStdString("Solution Path")), QLabel(QString::fromStdString("Failed Path")), QLabel(QString::fromStdString("Wall")),
@@ -157,7 +162,7 @@ void Widget::setColorPane(){
         Circle* currCircle = (this->colorCircles.at(i));
         currCircle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         //currCircle->setParent(this);
-        this->colorPane->addWidget(currCircle, 0, i);
+        this->colorPane->addWidget(currCircle, 0, i, Qt::AlignCenter);
         //this->colorPane->addWidget(dynamic_cast<QWidget*>(currCircle), 0, i);
     }
     //set the second row as the labels
@@ -165,12 +170,10 @@ void Widget::setColorPane(){
         QLabel* currLabel = (this->colorLabels.at(i));
         //this->colorPane->addItem(dynamic_cast<QLayoutItem*>(currLabel), 1, i);
         currLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        this->colorPane->addWidget(currLabel, 1, i);
+        this->colorPane->addWidget(currLabel, 1, i, Qt::AlignCenter);
     }
     this->colorPane->addWidget(this->btRegenerate);
     //this->colorPane->addStretch();
-    this->colorPane->setHorizontalSpacing(Widget::COLOR_PANE_H_GAP);
-    this->colorPane->setVerticalSpacing(Widget::COLOR_PANE_V_GAP);
 }
 //Makes the btRegenerate visible if @param visible is true
 //Else makes it invisible

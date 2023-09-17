@@ -45,7 +45,7 @@ private:
     QWidget* parent = nullptr;
     int state = 0;
     QColor* color = nullptr;
-    MazePane* mazePane;
+    MazePane* mazePane = nullptr;
     static string currEditSelection; //set it when a radio button change occurs in the button group of widget.cpp
 public:
     RectangleWidget(int state, QWidget* parent = nullptr, MazePane* mazePane = nullptr);
