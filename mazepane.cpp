@@ -253,6 +253,22 @@ QWidget* MazePane::getGridElement(int row, int column) const{
 //return -1 if not found
 int MazePane::getElementLabel(QWidget* widget) const{
     int result = -1;
+    for(int i = 0; i < this->rowLength; i++){
+        for(int j = 0; j < this->columnLength; j++){
+            QWidget* currWidget = nullptr;
+            QLayoutItem* currItem = this->itemAtPosition(i, j);
+            //ensure that current element is widget despite we know it
+            if(currItem != NULL && currItem->widget() != NULL){
+                currWidget = currItem->widget();
+                if(currWidget == widget){
+                    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                    result = mzg.getLabel(i, j);
+                    return result;
+                }
+            }
+        }
+    }
+    return result;
 }
 //Draws the whole maze from scratch based on the current mazeArr
 //Invoke from constructor

@@ -1,5 +1,6 @@
 #include "rectanglewidget.h"
 #include "widget.h"
+#include "mazegenerator.h"
 #include <iostream>
 
 using namespace std;
@@ -57,8 +58,36 @@ void RectangleWidget::setState(const int state){
         case WALL_STATE:
         case SOLUTION_STATE:
         case FAILED_STATE: this->state = state; break;
-        case MazePane::START_POS_VALUE: this->state = state; break;
-        case MazePane::TARGET_POS_VALUE: this->state = state; break;
+        case MazePane::START_POS_VALUE: this->state = state;
+            if(this->mazePane != NULL){
+                int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
+                if(currLabel != this->mazePane->getSourceLabel()){
+                    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                    int currLabelRow = mzg.getLabelRow(currLabel);
+                    int currLabelColumn = mzg.getLabelColumn(currLabel);
+                    this->mazePane->setSourcePos(currLabelRow, currLabelColumn); //required operations will be performed regarding specified label's
+                    //state within setSourcePos method
+                }
+            }
+            else{
+                cout << "Error: MazePane* data field of this RectangleWidget is nullptr. Unable to set state." << endl;
+            }
+        break;
+        case MazePane::TARGET_POS_VALUE: this->state = state;
+        if(this->mazePane != NULL){
+            int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
+            if(currLabel != this->mazePane->getTargetLabel()){
+                MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                int currLabelRow = mzg.getLabelRow(currLabel);
+                int currLabelColumn = mzg.getLabelColumn(currLabel);
+                this->mazePane->setTargetPos(currLabelRow, currLabelColumn); //required operations will be performed regarding specified label's
+                //state within setTargetPos method
+            }
+        }
+        else{
+            cout << "Error: MazePane* data field of this RectangleWidget is nullptr. Unable to set state." << endl;
+        }
+        break;
         default: this->state = 0;
     }
     newColor = new QColor(RectangleWidget::generateColor(this->state));
