@@ -35,7 +35,7 @@ public:
     static const int TRAVERSABLE_MAZE_THRESHOLD = 0;
     static const string SELF_GENERATE_VALUE;
     static const string AUTO_GENERATE_VALUE;
-    enum RADIO_SELECTION_VALUES{RADIO_WALL, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
+    enum RADIO_SELECTION_VALUES{RADIO_WALL = 0, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
 
     //ui constants
     static const int RADIO_BUTTON_HOLDER_SPACING = 20;

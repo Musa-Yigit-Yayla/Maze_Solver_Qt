@@ -11,8 +11,9 @@ MazePane::MazePane(bool autoGenerate){
         //generate empty maze for editing by user
         this->setDefaultMaze();
     }
-    this->setHorizontalSpacing(9);
+    this->setHorizontalSpacing(0);
     this->setVerticalSpacing(0);
+    this->setContentsMargins(0, 0, 0, 0);
     this->drawMazePane();
 }
 MazePane::~MazePane(){
@@ -246,6 +247,12 @@ void MazePane::drawMazePane(){
                 this->addWidget(currRect, i, j);
             }
         }
+        //add spacer items to the gridLayout so as to have our cells next to each other
+        QSpacerItem* horizontalSpacer = new QSpacerItem(RectangleWidget::RECTANGLE_WIDTH, RectangleWidget::RECTANGLE_HEIGHT, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        QSpacerItem* verticalSpacer = new QSpacerItem(RectangleWidget::RECTANGLE_HEIGHT, RectangleWidget::RECTANGLE_WIDTH, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        this->addItem(horizontalSpacer, 0, this->columnLength);
+        this->addItem(verticalSpacer, this->rowLength, 0);
     }
     else{
         cout << "Error: Unable to draw mazePane which is null pointer" << endl;

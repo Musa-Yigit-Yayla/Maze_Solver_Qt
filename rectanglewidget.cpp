@@ -168,6 +168,7 @@ void RectangleWidget::mousePressEvent(QMouseEvent* event){
         //Widget* container = reinterpret_cast<Widget*>(this->parent->parentWidget());
 
         int nextState = Widget::getRadioSelection();
+        cout <<  "Next state at RectangleWidget::mousePressEvent is " << nextState << endl;
         emit stateChanged(nextState);
     //}
 }

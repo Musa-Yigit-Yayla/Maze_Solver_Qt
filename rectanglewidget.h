@@ -27,11 +27,13 @@ Q_OBJECT
 public:
     static const int SOURCE_CELL_VALUE = 10;
     static const int TARGET_CELL_VALUE = 20;
-    static const int EMPTY_STATE = 0; //white
-    static const int VISITED_STATE = 1; //dark blue
-    static const int WALL_STATE = 2; //dark grey
-    static const int SOLUTION_STATE = 3; //green
-    static const int FAILED_STATE = 4; //red
+    static const int WALL_STATE = 0; //dark grey
+    static const int EMPTY_STATE = 1; //white grey
+    static const int SOURCE_STATE = 2; //yellow
+    static const int TARGET_STATE = 3; //purple
+    static const int VISITED_STATE = 4; //lime
+    static const int SOLUTION_STATE = 5; //green
+    static const int FAILED_STATE = 6; //red
     constexpr static const int RECTANGLE_WIDTH = 30; //30 pixels
     constexpr static const int RECTANGLE_HEIGHT = 30; //30 pixels
     static  const vector< QColor> DARK_BLUE_COLOR_SET;

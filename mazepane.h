@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <QGridLayout>
+#include <QSpacerItem>
 #include <stack>
 #include "widget.h"
 
@@ -12,13 +13,13 @@ Q_OBJECT //object macro
 public:
     static const int ROW_LENGTH = 12;
     static const int COLUMN_LENGTH = 16;
-    static const int EMPTY_GRID_VALUE = 0;
-    static const int VISITED_GRID_VALUE = 1;
-    static const int WALL_GRID_VALUE = 2;
-    static const int SOLUTION_GRID_VALUE = 3;
-    static const int FAILED_GRID_VALUE = 4;
-    static const int START_POS_VALUE = 5;
-    static const int TARGET_POS_VALUE = 6;
+    static const int EMPTY_GRID_VALUE = 1;
+    static const int VISITED_GRID_VALUE = 4;
+    static const int WALL_GRID_VALUE = 0;
+    static const int SOLUTION_GRID_VALUE = 5;
+    static const int FAILED_GRID_VALUE = 6;
+    static const int START_POS_VALUE = 2;
+    static const int TARGET_POS_VALUE = 3;
 private:
     int** mazeArr = nullptr;
     int rowLength = ROW_LENGTH;
