@@ -236,6 +236,24 @@ bool MazePane::isTraversable(int** givenMaze, int mazeLength, int columnLength){
     }
     return result;
 }
+//returns nullptr if given row and column indexes are invalid
+//returns a pointer to the exact grid element
+QWidget* MazePane::getGridElement(int row, int column) const{
+    QWidget* result = nullptr;
+    if(row >= 0 && row < this->rowLength && column >= 0 && column < columnLength){
+        QLayoutItem* item = this->itemAtPosition(row, column);
+        if(item != NULL && item->widget() != NULL){
+            result = item->widget();
+        }
+
+    }
+    return result;
+}
+//Return the position of the matching widget
+//return -1 if not found
+int MazePane::getElementLabel(QWidget* widget) const{
+    int result = -1;
+}
 //Draws the whole maze from scratch based on the current mazeArr
 //Invoke from constructor
 void MazePane::drawMazePane(){

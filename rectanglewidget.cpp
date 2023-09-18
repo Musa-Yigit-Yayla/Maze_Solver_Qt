@@ -56,8 +56,8 @@ void RectangleWidget::setState(const int state){
         case VISITED_STATE:
         case WALL_STATE:
         case SOLUTION_STATE:
-        case FAILED_STATE:
-        case MazePane::START_POS_VALUE:
+        case FAILED_STATE: this->state = state; break;
+        case MazePane::START_POS_VALUE: this->state = state; break;
         case MazePane::TARGET_POS_VALUE: this->state = state; break;
         default: this->state = 0;
     }

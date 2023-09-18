@@ -39,6 +39,8 @@ public:
     void setSourcePos(int row, int column);
     void setTargetPos(int row, int column);
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
+    QWidget* getGridElement(int row, int column) const; //return pointer to the grid element
+    int getElementLabel(QWidget* widget) const;
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
     void setDefaultMaze();
