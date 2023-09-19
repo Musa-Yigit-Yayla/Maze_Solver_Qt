@@ -130,9 +130,14 @@ void MazePane::setSourcePos(int row, int column){
         //set the rectangles' state
         prevSourceRect->setState(MazePane::TARGET_POS_VALUE);
         prevTargetLabel->setState(MazePane::START_POS_VALUE);
+        //update source and target labels
+        this->sourceLabelPos = mzg.getLabel(row, column);
+        this->targetLabelPos = mzg.getLabel(prevRow, prevColumn);
     }
     else{
-
+        //restore the sourceLabel data field to previous state and prompt an error message
+        this->sourceLabelPos = prevSourceLabel;
+        cout << "Error: restoring sourceLabelPos back to its previous state" << endl;
     }
 }
 //Sets the prev target as an empty grid
@@ -141,9 +146,9 @@ void MazePane::setTargetPos(int row, int column){
     int prevTargetLabel = this->targetLabelPos;
     MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
     this->targetLabelPos = mzg.getLabel(row, column);
+    int prevRow = mzg.getLabelRow(prevTargetLabel);
+    int prevColumn = mzg.getLabelColumn(prevTargetLabel);
     if(prevTargetLabel != this->targetLabelPos && this->sourceLabelPos != this->targetLabelPos){
-        int prevRow = mzg.getLabelRow(prevTargetLabel);
-        int prevColumn = mzg.getLabelColumn(prevTargetLabel);
         this->mazeArr[prevRow][prevColumn] = MazePane::EMPTY_GRID_VALUE;
         //retrieve the prev source rectangle widget and set its state to an empty path state
         RectangleWidget* prevTargetRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn)->widget());
@@ -155,10 +160,23 @@ void MazePane::setTargetPos(int row, int column){
     }
     else if(this->sourceLabelPos == this->targetLabelPos){
         //swap the source with target
+        RectangleWidget* prevSourceRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(row, column)->widget());
+        RectangleWidget* prevTargetLabel = dynamic_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn)->widget()); //set it as target
+
+        this->mazeArr[prevRow][prevColumn] = MazePane::START_POS_VALUE;
+        this->mazeArr[row][column] = MazePane::TARGET_POS_VALUE;
+
+        //set the rectangles' state
+        prevSourceRect->setState(MazePane::TARGET_POS_VALUE);
+        prevTargetLabel->setState(MazePane::START_POS_VALUE);
+        //update source and target labels
+        this->sourceLabelPos = mzg.getLabel(prevRow, prevColumn);
+        this->targetLabelPos = mzg.getLabel(row, column);
     }
     else{
         //restore the previous target label position data field and prompt an error message
         this->targetLabelPos = prevTargetLabel;
+        cout << "Error: restoring targetLabelPos back to its previous state" << endl;
     }
 }
 //static function to check whether a given maze, which is a valid maze, can be solved
