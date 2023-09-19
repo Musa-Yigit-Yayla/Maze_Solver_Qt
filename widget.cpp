@@ -77,6 +77,8 @@ void Widget::setGenerationSelector(){
     QString s2 = QString::fromStdString(Widget::AUTO_GENERATE_VALUE);
     this->generationSelector->addItem(s1, QVariant(1));
     this->generationSelector->addItem(s2, QVariant(2));
+    //set the initial selected option to item 2
+    this->generationSelector->setCurrentIndex(1);
     //connect the signal of QComboBox to the slot we have created
     QObject::connect(this->generationSelector, QOverload<int>::of(&QComboBox::currentIndexChanged), this, (&Widget::generationSelectorHandler));
 }
@@ -177,8 +179,8 @@ void Widget::setColorPane(){
 }
 //Makes the btRegenerate visible if @param visible is true
 //Else makes it invisible
-void btRegenerateSetVisible(bool visible){
-
+void Widget::btRegenerateSetVisible(bool visible){
+    this->btRegenerate->setVisible(visible);
 }
 //Invoke only once during initialization, from constructor
 //Selects an auto generated maze initially
@@ -189,11 +191,12 @@ void Widget::generateMazes(){
 void Widget::generationSelectorHandler(int selectionIndex){
     //o based indexing
     string selectedString;
-    if(selectionIndex == 0){ //self generate
-
+    if(selectionIndex == 0){ //self generate, user generates
+        //remove the regenerate button from the pane
+        this->btRegenerateSetVisible(false);
     }
     else if(selectionIndex == 1){//auto generate
-        //when auto generate is enabled remove the regenerate button from its container and re-add it during the other selection
+        this->btRegenerateSetVisible(true);
     }
 }
 //string Widget::getSelectedRadioButton() const{}
@@ -220,7 +223,16 @@ void Widget::radioButtonHandler(QAbstractButton* button, bool checked){
     }
 }
 void Widget::regenerateHandler(bool checked){
-
+    //retrieve another maze
+    int** newMaze = this->generatedMazes.at(rand() % this->generatedMazes.size());
+    //remove the previous mazepane from its container
+    this->verticalBox->removeItem(this->currMaze);
+    //deallocate the previous mazepane
+    delete this->currMaze;
+    //set the newMaze
+    this->currMaze = new MazePane(true);
+    //add the new maze pane onto our vbox
+    this->verticalBox->addLayout(this->currMaze);
 }
 //void Widget::radioButtonToggleHandler(QAbstractButton* button, bool checked){}
 const string Widget::SELF_GENERATE_VALUE = "Self Generate";
