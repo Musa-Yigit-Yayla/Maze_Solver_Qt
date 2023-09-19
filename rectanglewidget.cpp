@@ -62,7 +62,7 @@ void RectangleWidget::setState(const int state){
             if(this->mazePane != NULL){
                 int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
                 if(currLabel != this->mazePane->getSourceLabel()){
-                    MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                    MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
                     int currLabelRow = mzg.getLabelRow(currLabel);
                     int currLabelColumn = mzg.getLabelColumn(currLabel);
                     this->mazePane->setSourcePos(currLabelRow, currLabelColumn); //required operations will be performed regarding specified label's
@@ -77,7 +77,7 @@ void RectangleWidget::setState(const int state){
         if(this->mazePane != NULL){
             int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
             if(currLabel != this->mazePane->getTargetLabel()){
-                MazeGenerator mzg(0, 0, 0, 0, 0, 0, 0, 0);
+                MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
                 int currLabelRow = mzg.getLabelRow(currLabel);
                 int currLabelColumn = mzg.getLabelColumn(currLabel);
                 this->mazePane->setTargetPos(currLabelRow, currLabelColumn); //required operations will be performed regarding specified label's

@@ -2,6 +2,7 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 #include <stack>
+#include <vector>
 #include "widget.h"
 
 using namespace std;
@@ -39,8 +40,10 @@ public:
     void setSourcePos(int row, int column);
     void setTargetPos(int row, int column);
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
+    static vector<int> getSourceTargetLabels(int* givenMaze[], int rowLength, int columnLength);
     QWidget* getGridElement(int row, int column) const; //return pointer to the grid element
     int getElementLabel(QWidget* widget) const;
+    void printMaze() const;
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
     void setDefaultMaze();
