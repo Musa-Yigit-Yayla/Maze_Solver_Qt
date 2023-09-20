@@ -202,10 +202,11 @@ void RectangleWidget::mousePressEvent(QMouseEvent* event){
     //we determine the next state based on the current radio button selection
     //if(this->parent != NULL){
         //Widget* container = reinterpret_cast<Widget*>(this->parent->parentWidget());
-
+    if(this->mazePane != NULL && this->mazePane->getIsMutable()){ // do not alternate the maze if it has been solved
         int nextState = Widget::getRadioSelection();
         cout <<  "Next state at RectangleWidget::mousePressEvent is " << nextState << endl;
         emit stateChanged(nextState);
+    }
     //}
 }
 

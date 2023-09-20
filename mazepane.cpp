@@ -30,6 +30,11 @@ MazePane::~MazePane(){
 
 }
 void MazePane::solve(){
+    //as soon as the maze is being solved we set the isMutable to false
+    this->isMutable = false;
+    //apply Dijkstra's algorithm where source label is the origin vertex and retrieve min distance to each empty cell and the target cell
+    //if the distance to target cell is not infinity, visualize the path after having done backtracking and also visualize visited cells
+    //otherwise paint cells stemming from source to failed state
 
 }
 //Updates the mazeArr with respect to current colors of rectangles
@@ -393,4 +398,7 @@ void MazePane::printMaze() const{
     else{
         cout << "Error: cannot print null matrix" << endl;
     }
+}
+bool MazePane::getIsMutable() const{
+    return this->isMutable();
 }

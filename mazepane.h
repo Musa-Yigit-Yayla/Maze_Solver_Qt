@@ -44,6 +44,7 @@ public:
     QWidget* getGridElement(int row, int column) const; //return pointer to the grid element
     int getElementLabel(QWidget* widget) const;
     void printMaze() const;
+    bool isMutable() const;
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
     void setDefaultMaze();
