@@ -1,7 +1,9 @@
 #include "mazepane.h"
 #include "mazegenerator.h"
 #include "rectanglewidget.h"
+#include <climits>
 #include <iostream>
+#include <unordered_set>
 
 using namespace std;
 
@@ -35,7 +37,56 @@ void MazePane::solve(){
     //apply Dijkstra's algorithm where source label is the origin vertex and retrieve min distance to each empty cell and the target cell
     //if the distance to target cell is not infinity, visualize the path after having done backtracking and also visualize visited cells
     //otherwise paint cells stemming from source to failed state
+    //2d maze resembles a unweighted and undirected graph
 
+    //initialize adjacency matrix
+    int vertexCount = this->rowLength * this->columnLength;
+    int adjMatrix[vertexCount][vertexCount];
+
+    MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
+    for(int i = 0; i < vertexCount; i++){
+        int currLabelRow = mzg.getLabelRow(i);
+        int currLabelColumn = mzg.getLabelColumn(i);
+        if(this->mazeArr[currLabelRow][currLabelColumn] == MazePane::WALL_GRID_VALUE){
+            //continue as we cannot be on a wall hence there is no need to compute travel cost to its adjacent square
+            continue;
+        }
+        for(int j = 0; j < vertexCount; j++){
+            if(this->isAdjacent(i, j)){
+                int adjRow = mzg.getLabelRow(j);
+                int adjColumn = mzg.getLabelColumn(j);
+                if(this->mazeArr[adjRow][adjColumn] == MazePane::WALL_GRID_VALUE){
+                    //set to -1 as it's a wall
+                    adjMatrix[i][j] = -1;
+                }
+                else{
+                    //set it to 1
+                    adjMatrix[i][j] = 1;
+                }
+            }
+            else if(i == j){
+                adjMatrix[i][j] = 0;
+            }
+            else{
+                adjMatrix[i][j] = INT_MAX;
+            }
+        }
+    }
+    //apply dijktra's shortest path algorithm
+
+    int originVertex = this->getSourceLabel();
+    unordered_set<int> vertexSet;
+    vertexSet.insert(originVertex);
+
+    int weight[vertexCount]; //minimum total weight of traveling to each moveable cell starting from origin vertex
+    for(int i = 0; i < vertexCount; i++){
+        weight[i] = adjMatrix[originVertex][i];
+    }
+
+    //apply 2nd step
+    for(int i = 0; i < vertexCount - 1; i++){
+
+    }
 }
 //Updates the mazeArr with respect to current colors of rectangles
 void MazePane::updateMazeArr(){
@@ -400,5 +451,18 @@ void MazePane::printMaze() const{
     }
 }
 bool MazePane::getIsMutable() const{
-    return this->isMutable();
+    return this->isMutable;
+}
+//returns whether if given labels are mathematically adjacent to one another
+bool MazePane::isAdjacent(int label1, int label2) const{
+    int p1, p2, p3, p4; //possible adjacent positions of label1
+    //start from top end on left clockwise
+    p1 = label1 - this->columnLength;
+    p2 = label1 + 1;
+    p3 = label1 + this->columnLength;
+    p4 = label1 - 1;
+
+    bool result = (label2 >= 0 && label2 < this->rowLength * this->columnLength) && (label1 >= 0 && label1 < this->rowLength * this->columnLength)
+                  && (p1 == label2 || p2 == label2 || p3 == label2 || p4 == label2);
+    return result;
 }
