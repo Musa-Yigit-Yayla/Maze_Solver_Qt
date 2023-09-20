@@ -4,6 +4,7 @@
 #include <climits>
 #include <iostream>
 #include <unordered_set>
+#include <algorithm>
 
 using namespace std;
 
@@ -41,7 +42,10 @@ void MazePane::solve(){
 
     //initialize adjacency matrix
     int vertexCount = this->rowLength * this->columnLength;
-    int adjMatrix[vertexCount][vertexCount];
+    int** adjMatrix = new int*[vertexCount];
+    for(int i = 0; i < vertexCount; i++){
+        adjMatrix[i] = new int[vertexCount];
+    }
 
     MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
     for(int i = 0; i < vertexCount; i++){
@@ -85,6 +89,41 @@ void MazePane::solve(){
 
     //apply 2nd step
     for(int i = 0; i < vertexCount - 1; i++){
+        //find the smallest weighted vertex v which is not in vertex set and which is not a wall
+        int v = MazePane::getSmallestUnvisitedLabel(vertexSet, weight, vertexCount);
+        vertexSet.insert(v); //add v to the vertex set
+        if(v != -1){
+            //check weight j for all vertices not included in vertex set
+            for(int j = 0; j < vertexCount; j++){
+                if(vertexSet.count(j) == 0){
+                    if(weight[j] > weight[v] + adjMatrix[v][j]){
+                        weight[j] = weight[j] + adjMatrix[v][j];
+                    }
+                }
+            }
+        }
+    }
+    //visualize the solution with a timer event
+    bool solved = weight[this->targetLabelPos] != INT_MAX;
+    this->visualizeSolution(solved, weight, adjMatrix, vertexCount);
+    //deallocate adjMatrix since it's dynamically allocated
+    for(int i = 0; i < vertexCount; i++){
+        delete[] adjMatrix[i];
+    }
+    delete[] adjMatrix;
+}
+void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMatrix[], const int vertexCount){
+    if(isSolved){
+        vector<vector<int>> prioritizedVertices; //vertices stored in vectors which will be painted with respect to their closeness to source pos
+        //backtrack the shortest path from source to target and store them in a vector
+        vector<int> solutionPath;
+        int currLabel = this->targetLabelPos;
+        while(currLabel != this->sourceLabelPos){
+            //retrieve the minimum weighted adjacent of currLabel and set it as currLabel after having pushed it into the vector
+            int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel);
+        }
+    }
+    else{
 
     }
 }
@@ -465,4 +504,25 @@ bool MazePane::isAdjacent(int label1, int label2) const{
     bool result = (label2 >= 0 && label2 < this->rowLength * this->columnLength) && (label1 >= 0 && label1 < this->rowLength * this->columnLength)
                   && (p1 == label2 || p2 == label2 || p3 == label2 || p4 == label2);
     return result;
+}
+//static utility function
+//disregards walls
+//returns -1 if no candidate is found
+int MazePane::getSmallestUnvisitedLabel(const unordered_set<int>& vertexSet, const int weights[], const int vertexCount){
+    int minResult = INT_MAX;
+
+    for(int i = 0; i < vertexCount; i++){
+        if(vertexSet.count(i) == 0 && weights[i] != -1 && weights[i] < minResult){
+            minResult = i;
+        }
+    }
+    if(minResult == INT_MAX){
+        minResult = -1;
+    }
+    return minResult;
+}
+//static utility function to return the smallest adjacent label
+//returns -1 if no candidate has been found
+int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel) const{
+
 }
