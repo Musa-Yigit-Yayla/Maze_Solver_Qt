@@ -111,12 +111,12 @@ void MazePane::setSourcePos(int row, int column){
         //first cast the QLayoutItem to Qwidget using reinterpret cast
         //QWidget* rectWidget = reinterpret_cast<QWidget*>(this->itemAtPosition(prevRow, prevColumn));
         RectangleWidget* prevSourceRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn)->widget());
-        prevSourceRect->setState(MazePane::EMPTY_GRID_VALUE);
+        prevSourceRect->setState(MazePane::EMPTY_GRID_VALUE, true);
         //set the new source rectangle's state
         //rectWidget = reinterpret_cast<QWidget*>(this->itemAtPosition(row, column));
         RectangleWidget* newSourceRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(row, column)->widget());
         this->mazeArr[row][column] = MazePane::START_POS_VALUE;
-        newSourceRect->setState(MazePane::START_POS_VALUE);
+        newSourceRect->setState(MazePane::START_POS_VALUE, true);
     }
     else if(this->sourceLabelPos == this->targetLabelPos){
         //swap the source with target
@@ -128,8 +128,8 @@ void MazePane::setSourcePos(int row, int column){
         this->mazeArr[row][column] = MazePane::START_POS_VALUE;
 
         //set the rectangles' state
-        prevSourceRect->setState(MazePane::TARGET_POS_VALUE);
-        prevTargetLabel->setState(MazePane::START_POS_VALUE);
+        prevSourceRect->setState(MazePane::TARGET_POS_VALUE, true);
+        prevTargetLabel->setState(MazePane::START_POS_VALUE, true);
         //update source and target labels
         this->sourceLabelPos = mzg.getLabel(row, column);
         this->targetLabelPos = mzg.getLabel(prevRow, prevColumn);
@@ -152,11 +152,11 @@ void MazePane::setTargetPos(int row, int column){
         this->mazeArr[prevRow][prevColumn] = MazePane::EMPTY_GRID_VALUE;
         //retrieve the prev source rectangle widget and set its state to an empty path state
         RectangleWidget* prevTargetRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(prevRow, prevColumn)->widget());
-        prevTargetRect->setState(MazePane::EMPTY_GRID_VALUE);
+        prevTargetRect->setState(MazePane::EMPTY_GRID_VALUE, true);
         //set the new source rectangle's state
         RectangleWidget* newTargetRect = dynamic_cast<RectangleWidget*>(this->itemAtPosition(row, column)->widget());
         this->mazeArr[row][column] = MazePane::TARGET_POS_VALUE;
-        newTargetRect->setState(MazePane::TARGET_POS_VALUE);
+        newTargetRect->setState(MazePane::TARGET_POS_VALUE, true);
     }
     else if(this->sourceLabelPos == this->targetLabelPos){
         //swap the source with target
@@ -167,8 +167,8 @@ void MazePane::setTargetPos(int row, int column){
         this->mazeArr[row][column] = MazePane::TARGET_POS_VALUE;
 
         //set the rectangles' state
-        prevSourceRect->setState(MazePane::TARGET_POS_VALUE);
-        prevTargetLabel->setState(MazePane::START_POS_VALUE);
+        prevSourceRect->setState(MazePane::TARGET_POS_VALUE, true);
+        prevTargetLabel->setState(MazePane::START_POS_VALUE, true);
         //update source and target labels
         this->sourceLabelPos = mzg.getLabel(prevRow, prevColumn);
         this->targetLabelPos = mzg.getLabel(row, column);

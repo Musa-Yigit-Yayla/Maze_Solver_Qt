@@ -50,12 +50,19 @@ QWidget* RectangleWidget::getParent() const{
     return this->parent;
 }
 //Invokes set color automatically
-void RectangleWidget::setState(const int state){
+//recursivelyCalled method will be used for logic determining execution flow, do not pass anything if called from outside
+void RectangleWidget::setState(const int state, const bool recursivelyCalled){
     QColor* newColor = nullptr;
     switch(state){
         case EMPTY_STATE:
-        case VISITED_STATE:
         case WALL_STATE:
+            //if the current rectangle is source or target rectangle we do not perform any operations and return
+        if(this->color != NULL && !recursivelyCalled && (*this->color == RectangleWidget::SOURCE_COLOR || *this->color == RectangleWidget::TARGET_COLOR)){
+            //do not perform any state changes and return immediately
+            return;
+        }
+        this->state = state; break;
+        case VISITED_STATE:
         case SOLUTION_STATE:
         case FAILED_STATE: this->state = state; break;
         case MazePane::START_POS_VALUE: this->state = state;
