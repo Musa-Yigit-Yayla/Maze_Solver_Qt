@@ -26,6 +26,9 @@ MazePane::MazePane(bool autoGenerate){
         //generate empty maze for editing by user
         this->setDefaultMaze();
     }
+    //initialize QTimer object and connect it to corresponding slot
+    this->solveTimer = new QTimer(this);
+    QObject::connect(this->solveTimer, (&QTimer::timeout), this, (&MazePane::solveTimerSlot));
     this->setHorizontalSpacing(0);
     this->setVerticalSpacing(0);
     this->setContentsMargins(0, 0, 0, 0);
@@ -133,6 +136,10 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
     else{
 
     }
+}
+//Slot connected to QTimer data field
+void MazePane::solveTimerSlot(){
+
 }
 //Updates the mazeArr with respect to current colors of rectangles
 void MazePane::updateMazeArr(){

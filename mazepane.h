@@ -4,6 +4,7 @@
 #include <stack>
 #include <unordered_set>
 #include <vector>
+#include <QTimer>
 #include "widget.h"
 
 using namespace std;
@@ -29,6 +30,7 @@ private:
     int sourceLabelPos = 0;
     int targetLabelPos = this->rowLength * this->columnLength - 1;
     bool isMutable = true; //will be used to determine whether user can alternate the slots of the maze
+    QTimer* solveTimer = nullptr;
 
 public:
     MazePane(bool autoGenerate = true);
@@ -55,8 +57,9 @@ private:
     void visualizeSolution(bool isSolved, const int weights[], int* adjMatrix[], const int vertexCount); //visualize the solution
     void bfsMoveables(vector<vector<int>>& prioritizedVertices) const;
 
-//public slots:
+public slots:
     //void squareClicked(int row, int column);
+    void solveTimerSlot();
 };
 
 #endif // MAZEPANE_H
