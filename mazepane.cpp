@@ -118,6 +118,10 @@ void MazePane::solve(){
     delete[] adjMatrix;
 }
 void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMatrix[], const int vertexCount){
+    //Retrieve prioritizedVertices regardless of solved state
+    vector<vector<int>> prioritizedVertices; //vertices stored in vectors which will be painted with respect to their closeness to source pos
+    //prioritize vertices which are not target nor a wall, stemming from source position using bfs
+    this->bfsMoveables(prioritizedVertices);
     if(isSolved){
         vector<vector<int>> prioritizedVertices; //vertices stored in vectors which will be painted with respect to their closeness to source pos
         //backtrack the shortest path from source to target and store them in a vector
@@ -129,17 +133,33 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
             solutionPath.push_back(minAdjacent);
             currLabel = minAdjacent;
         }
-        //prioritize vertices which are not target nor a wall, stemming from source position using bfs
-        this->bfsMoveables(prioritizedVertices);
+
+
         //start setting the states of rectangles at the respective labels with a timer object
+
+        QVariant variant2 = QVariant::fromValue(solutionPath);
+
+        this->solveTimer->setProperty("isSolved", true);
+        this->solveTimer->setProperty("solutionPath", variant2);
+        this->solveTimer->setInterval(MazePane::SOLVED_TIMER_MILLIS);
     }
     else{
-
+        //apply bfs just to retrieve the priority vector
+       this->solveTimer->setProperty("isSolved", false);
+        this->solveTimer->setInterval(MazePane::FAILED_TIMER_MILLIS);
     }
+    QVariant variant1 = QVariant::fromValue(prioritizedVertices);
+    this->solveTimer->setProperty("priorityVector", variant1);
+
+    this->solveTimer->start();
 }
 //Slot connected to QTimer data field
 void MazePane::solveTimerSlot(){
-
+    static int cycleCounter = 0;
+    //retrieve priorityVector property
+    vector<vector<int>> prioritizedVertices = this->solveTimer
+    if(cycleCounter)
+    //cycle count depends on the priorityVector property's length
 }
 //Updates the mazeArr with respect to current colors of rectangles
 void MazePane::updateMazeArr(){

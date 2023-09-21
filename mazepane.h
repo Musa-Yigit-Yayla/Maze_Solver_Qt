@@ -23,6 +23,8 @@ public:
     static const int FAILED_GRID_VALUE = 6;
     static const int START_POS_VALUE = 2;
     static const int TARGET_POS_VALUE = 3;
+    static const int FAILED_TIMER_MILLIS = 250;
+    static const int SOLVED_TIMER_MILLIS = 400;
 private:
     int** mazeArr = nullptr;
     int rowLength = ROW_LENGTH;
