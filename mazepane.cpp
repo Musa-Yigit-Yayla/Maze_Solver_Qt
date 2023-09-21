@@ -127,7 +127,8 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
             currLabel = minAdjacent;
         }
         //prioritize vertices which are not target nor a wall, stemming from source position using bfs
-
+        this->bfsMoveables(prioritizedVertices);
+        //start setting the states of rectangles at the respective labels with a timer object
     }
     else{
 
@@ -585,8 +586,35 @@ void MazePane::bfsMoveables(vector<vector<int>>& prioritizedVertices) const{
             }
         }
     }
-
-
-    queue<int> q;
     //apply bfs traversal to the queue and push visited labels to prioritizedVertices simultaneously with respect to their priority
+    queue<int> q;
+    //mark source vertex as visited and push it onto the queue
+    int source = this->sourceLabelPos;
+    q.push(source);
+    visit[source];
+
+    while(!q.empty()){
+        int currLabel = q.front();
+        q.pop();
+
+        vector<int> currAdj = mzg.getAdjLabels(currLabel);
+        vector<int> unvisitedAdj;
+        for(int label: currAdj){
+            int labelRow = mzg.getLabelRow(label);
+            int labelColumn = mzg.getLabelColumn(label);
+
+            int labelState = this->mazeArr[labelRow][labelColumn];
+            //Below condition could be problematic due to value mismatch
+            if(!visit[label] && labelState != MazePane::WALL_GRID_VALUE && labelState != MazePane::TARGET_POS_VALUE){
+                unvisitedAdj.push_back(label);
+            }
+        }
+        for(int unvisitedLabel: unvisitedAdj){
+            q.push(unvisitedLabel);
+            visit[unvisitedLabel] = true;
+        }
+        //push the unvisitedAdj vector to prioritizedVertices' priority index
+        vector<vector<int>>::iterator posIterator = prioritizedVertices.begin() + currPriority++;
+        prioritizedVertices.insert(posIterator, unvisitedAdj);
+    }
 }
