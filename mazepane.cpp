@@ -2,8 +2,10 @@
 #include "mazegenerator.h"
 #include "rectanglewidget.h"
 #include <climits>
+#include <cmath>
 #include <iostream>
 #include <unordered_set>
+#include <queue>
 #include <algorithm>
 
 using namespace std;
@@ -121,7 +123,11 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
         while(currLabel != this->sourceLabelPos){
             //retrieve the minimum weighted adjacent of currLabel and set it as currLabel after having pushed it into the vector
             int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel);
+            solutionPath.push_back(minAdjacent);
+            currLabel = minAdjacent;
         }
+        //prioritize vertices which are not target nor a wall, stemming from source position using bfs
+
     }
     else{
 
@@ -524,5 +530,63 @@ int MazePane::getSmallestUnvisitedLabel(const unordered_set<int>& vertexSet, con
 //static utility function to return the smallest adjacent label
 //returns -1 if no candidate has been found
 int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel) const{
+    int p1, p2, p3, p4; //possible adjacent positions of label1
+    //start from top end on left clockwise
+    p1 = currLabel - this->columnLength;
+    p2 = currLabel + 1;
+    p3 = currLabel + this->columnLength;
+    p4 = currLabel - 1;
 
+    int result = -1;
+    int minValue = INT_MAX;
+    if(p1 >= 0 && p1 < vertexCount){
+        if(weights[p1] != - 1 && minValue > weights[p1]){
+            minValue = weights[p1];
+            result = p1;
+        }
+    }
+    if(p2 >= 0 && p2 < vertexCount){
+        if(weights[p2] != - 1 && minValue > weights[p2]){
+            minValue = weights[p2];
+            result = p2;
+        }
+    }
+    if(p3 >= 0 && p3 < vertexCount){
+        if(weights[p3] != - 1 && minValue > weights[p3]){
+            minValue = weights[p3];
+            result = p3;
+        }
+    }
+    if(p4 >= 0 && p4 < vertexCount){
+        if(weights[p4] != - 1 && minValue > weights[p4]){
+            minValue = weights[p4];
+            result = p4;
+        }
+    }
+    return result;
+}
+//Applies bfs traversal on our maze and adds the traversed moveable cells into the given 2d vector reference with respect to current priority
+void MazePane::bfsMoveables(vector<vector<int>>& prioritizedVertices) const{
+    int currPriority = 0; //direct adjacent moveable vertices of the source pos has priority 0, then priority increases by one
+
+    //create a visit array which disregards wall
+    int vertexCount = this->rowLength * this->columnLength;
+    bool visit[vertexCount];
+    MazeGenerator mzg(0, 0, this->rowLength, this->columnLength, 0, 0, 0, 0);
+    //set the target and wall visit values to true for disregarding them during bfs traversal
+    for(int i = 0; i < this->rowLength; i++){
+        for(int j = 0; j < this->columnLength; j++){
+            int currLabel = mzg.getLabel(i, j);
+            if(this->mazeArr[i][j] == MazePane::WALL_GRID_VALUE || this->mazeArr[i][j] == MazePane::TARGET_POS_VALUE){
+                visit[currLabel] = true;
+            }
+            else{
+                visit[currLabel] = false;
+            }
+        }
+    }
+
+
+    queue<int> q;
+    //apply bfs traversal to the queue and push visited labels to prioritizedVertices simultaneously with respect to their priority
 }

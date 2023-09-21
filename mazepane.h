@@ -53,6 +53,7 @@ private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update
     void setDefaultMaze();
     void visualizeSolution(bool isSolved, const int weights[], int* adjMatrix[], const int vertexCount); //visualize the solution
+    void bfsMoveables(vector<vector<int>>& prioritizedVertices) const;
 
 //public slots:
     //void squareClicked(int row, int column);
