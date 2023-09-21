@@ -123,7 +123,7 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
     //prioritize vertices which are not target nor a wall, stemming from source position using bfs
     this->bfsMoveables(prioritizedVertices);
     if(isSolved){
-        vector<vector<int>> prioritizedVertices; //vertices stored in vectors which will be painted with respect to their closeness to source pos
+        //vector<vector<int>> prioritizedVertices; //vertices stored in vectors which will be painted with respect to their closeness to source pos
         //backtrack the shortest path from source to target and store them in a vector
         vector<int> solutionPath;
         int currLabel = this->targetLabelPos;
@@ -157,8 +157,64 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
 void MazePane::solveTimerSlot(){
     static int cycleCounter = 0;
     //retrieve priorityVector property
-    vector<vector<int>> prioritizedVertices = this->solveTimer
-    if(cycleCounter)
+    vector<vector<int>> prioritizedVertices;
+    QVariant v1 = this->solveTimer->property("priorityVector");
+    //ensure that the data contains our prioritizedVertices, else print an error message
+    if(v1.canConvert<vector<vector<int>>>()){
+        prioritizedVertices = v1.value<vector<vector<int>>>();
+    }
+    else{
+        cout << "Error: cannot convert the QVariant to 2d vector" << endl;
+    }
+    if(cycleCounter >=  prioritizedVertices.size()){
+        cycleCounter = 0;
+        //stop the timer
+        this->solveTimer->stop();
+    }
+    else{
+        vector<int> currLabels = prioritizedVertices.at(cycleCounter);
+        //retrieve the isSolved property
+        bool solved = this->solveTimer->property("isSolved").toBool();
+        MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);;
+        if(solved){
+            vector<int> solutionPath;
+            QVariant v2 = this->solveTimer->property("solutionPath");
+            for(int currLabel: currLabels){
+                int currLabelRow = mzg.getLabelRow(currLabel);
+                int currLabelColumn = mzg.getLabelColumn(currLabel);
+
+                QWidget* gridElt = this->getGridElement(currLabelRow, currLabelColumn);
+                RectangleWidget* currRect = dynamic_cast<RectangleWidget*>(gridElt);
+
+                vector<int>::iterator solBegin = solutionPath.begin();
+                vector<int>::iterator solTerminate = solutionPath.end();
+                if(std::count(solBegin, solTerminate, currLabel) == 0){
+                    //regular visited label
+                    //retrieve the rectangle widget and set the state to visited state
+                    this->mazeArr[currLabelRow][currLabelColumn] = MazePane::VISITED_GRID_VALUE;
+                    currRect->setState(RectangleWidget::VISITED_STATE);
+                }
+                else{
+                    //retrieve the rectangle widget and set it to solution path state
+                    this->mazeArr[currLabelRow][currLabelColumn] = MazePane::SOLUTION_GRID_VALUE;
+                    currRect->setState(RectangleWidget::SOLUTION_STATE);
+                }
+            }
+        }
+        else{ //failed state
+            for(int currLabel: currLabels){
+                int currLabelRow = mzg.getLabelRow(currLabel);
+                int currLabelColumn = mzg.getLabelColumn(currLabel);
+
+                QWidget* gridElt = this->getGridElement(currLabelRow, currLabelColumn);
+                RectangleWidget* currRect = dynamic_cast<RectangleWidget*>(gridElt);
+
+                this->mazeArr[currLabelRow][currLabelColumn] = MazePane::FAILED_GRID_VALUE;
+                currRect->setState(RectangleWidget::FAILED_STATE);
+            }
+        }
+        cycleCounter++; //increment by one to avoid infinite signal emissions
+    }
     //cycle count depends on the priorityVector property's length
 }
 //Updates the mazeArr with respect to current colors of rectangles
