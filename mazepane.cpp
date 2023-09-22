@@ -90,6 +90,9 @@ void MazePane::solve(){
 
     int weight[vertexCount]; //minimum total weight of traveling to each moveable cell starting from origin vertex
     for(int i = 0; i < vertexCount; i++){
+        weight[i] = INT_MAX;
+    }
+    for(int i = 0; i < vertexCount; i++){
         weight[i] = adjMatrix[originVertex][i];
     }
 
@@ -102,7 +105,7 @@ void MazePane::solve(){
             //check weight j for all vertices not included in vertex set
             for(int j = 0; j < vertexCount; j++){
                 if(vertexSet.count(j) == 0){
-                    if(weight[j] > weight[v] + adjMatrix[v][j]){
+                    if((weight[v] != INT_MAX && adjMatrix[v][j] != INT_MAX) && weight[j] > weight[v] + adjMatrix[v][j]){
                         weight[j] = weight[j] + adjMatrix[v][j];
                     }
                 }
@@ -111,6 +114,8 @@ void MazePane::solve(){
     }
     //visualize the solution with a timer event
     bool solved = weight[this->targetLabelPos] != INT_MAX;
+    cout << "Debug: Solved state of the current maze is " << solved << endl << "Weight of the tarLabel is " << weight[this->targetLabelPos] << endl
+         << "target label position is " << this->targetLabelPos << endl;
     this->visualizeSolution(solved, weight, adjMatrix, vertexCount);
     //deallocate adjMatrix since it's dynamically allocated
     for(int i = 0; i < vertexCount; i++){
