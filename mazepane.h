@@ -51,7 +51,7 @@ public:
     void printMaze() const;
     bool getIsMutable() const;
     bool isAdjacent( int label1, int label2) const;
-    int getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel) const;
+    int getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel, const vector<int>& solutionPath) const;
     static int getSmallestUnvisitedLabel(const unordered_set<int>& vertexSet, const int weights[], const int vertexCount);
 private:
     void drawMazePane(); //call from constructor during initialization or when you need to redraw the maze after an update

@@ -58,6 +58,7 @@ void MazePane::solve(){
         int currLabelColumn = mzg.getLabelColumn(i);
         if(this->mazeArr[currLabelRow][currLabelColumn] == MazePane::WALL_GRID_VALUE){
             //continue as we cannot be on a wall hence there is no need to compute travel cost to its adjacent square
+            //!!!PROBLEM MIGHT BE STEMMING FROM HERE
             continue;
         }
         for(int j = 0; j < vertexCount; j++){
@@ -65,8 +66,8 @@ void MazePane::solve(){
                 int adjRow = mzg.getLabelRow(j);
                 int adjColumn = mzg.getLabelColumn(j);
                 if(this->mazeArr[adjRow][adjColumn] == MazePane::WALL_GRID_VALUE){
-                    //set to -1 as it's a wall
-                    adjMatrix[i][j] = -1;
+                    //set to int max as it's a wall
+                    adjMatrix[i][j] = INT_MAX;
                 }
                 else{
                     //set it to 1
@@ -127,10 +128,13 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
         //backtrack the shortest path from source to target and store them in a vector
         vector<int> solutionPath;
         int currLabel = this->targetLabelPos;
-        while(currLabel != this->sourceLabelPos){
+        while(currLabel != this->sourceLabelPos && currLabel != -1){
             //retrieve the minimum weighted adjacent of currLabel and set it as currLabel after having pushed it into the vector
-            int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel);
-            solutionPath.push_back(minAdjacent);
+            int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel, solutionPath);
+            if(minAdjacent != -1){
+                solutionPath.push_back(minAdjacent);
+            }
+
             currLabel = minAdjacent;
         }
 
@@ -613,7 +617,7 @@ int MazePane::getSmallestUnvisitedLabel(const unordered_set<int>& vertexSet, con
 }
 //static utility function to return the smallest adjacent label
 //returns -1 if no candidate has been found
-int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel) const{
+int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCount, const int currLabel, const vector<int>& solutionPath) const{
     int p1, p2, p3, p4; //possible adjacent positions of label1
     //start from top end on left clockwise
     p1 = currLabel - this->columnLength;
@@ -623,25 +627,27 @@ int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCoun
 
     int result = -1;
     int minValue = INT_MAX;
-    if(p1 >= 0 && p1 < vertexCount){
+    vector<int>::const_iterator itBegin = solutionPath.begin();
+    vector<int>::const_iterator itEnd = solutionPath.end();
+    if(p1 >= 0 && p1 < vertexCount && std::count(itBegin, itEnd, p1) == 0){
         if(weights[p1] != - 1 && minValue > weights[p1]){
             minValue = weights[p1];
             result = p1;
         }
     }
-    if(p2 >= 0 && p2 < vertexCount){
+    if(p2 >= 0 && p2 < vertexCount && std::count(itBegin, itEnd, p2)){
         if(weights[p2] != - 1 && minValue > weights[p2]){
             minValue = weights[p2];
             result = p2;
         }
     }
-    if(p3 >= 0 && p3 < vertexCount){
+    if(p3 >= 0 && p3 < vertexCount && std::count(itBegin, itEnd, p3)){
         if(weights[p3] != - 1 && minValue > weights[p3]){
             minValue = weights[p3];
             result = p3;
         }
     }
-    if(p4 >= 0 && p4 < vertexCount){
+    if(p4 >= 0 && p4 < vertexCount && std::count(itBegin, itEnd, p4)){
         if(weights[p4] != - 1 && minValue > weights[p4]){
             minValue = weights[p4];
             result = p4;
