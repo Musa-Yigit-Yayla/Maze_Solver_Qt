@@ -133,16 +133,20 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
         //backtrack the shortest path from source to target and store them in a vector
         vector<int> solutionPath;
         int currLabel = this->targetLabelPos;
-        while(currLabel != this->sourceLabelPos && currLabel != -1){
+        while(currLabel != this->sourceLabelPos && currLabel != -1){ //CURRLABEL != -1 IS PROBLEMATIC
             //retrieve the minimum weighted adjacent of currLabel and set it as currLabel after having pushed it into the vector
             int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel, solutionPath);
+            //cout << "Debug: Solution path vertices are: ";
             if(minAdjacent != -1){
                 solutionPath.push_back(minAdjacent);
+                cout << "Pushing " << minAdjacent << " to solution path" << endl;
             }
-
+            else{
+                cout << minAdjacent << " is not a sol cell,";
+            }
             currLabel = minAdjacent;
         }
-
+        cout << endl;
 
         //start setting the states of rectangles at the respective labels with a timer object
 
@@ -197,7 +201,7 @@ void MazePane::solveTimerSlot(){
 
                 vector<int>::iterator solBegin = solutionPath.begin();
                 vector<int>::iterator solTerminate = solutionPath.end();
-                if(std::count(solBegin, solTerminate, currLabel) == 0){
+                if(std::count(solBegin, solTerminate, currLabel) == 0 && currLabel != this->sourceLabelPos){
                     //regular visited label
                     //retrieve the rectangle widget and set the state to visited state
                     this->mazeArr[currLabelRow][currLabelColumn] = MazePane::VISITED_GRID_VALUE;
@@ -632,28 +636,34 @@ int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCoun
 
     int result = -1;
     int minValue = INT_MAX;
+    //print out the exact solution path for debugging purposes
+    cout << "Debug: The current exact solution path is; ";
+    for(int i = 0; i < solutionPath.size(); i++){
+        cout << solutionPath.at(i) << " " << endl;
+    }
+    cout << endl;
     vector<int>::const_iterator itBegin = solutionPath.begin();
     vector<int>::const_iterator itEnd = solutionPath.end();
     if(p1 >= 0 && p1 < vertexCount && std::count(itBegin, itEnd, p1) == 0){
-        if(weights[p1] != - 1 && minValue > weights[p1]){
+        if(weights[p1] != INT_MAX && minValue > weights[p1]){ //!!!swap INT_MAX with -1 if necessary
             minValue = weights[p1];
             result = p1;
         }
     }
-    if(p2 >= 0 && p2 < vertexCount && std::count(itBegin, itEnd, p2)){
-        if(weights[p2] != - 1 && minValue > weights[p2]){
+    if(p2 >= 0 && p2 < vertexCount && std::count(itBegin, itEnd, p2) == 0){
+        if(weights[p2] != INT_MAX && minValue > weights[p2]){
             minValue = weights[p2];
             result = p2;
         }
     }
-    if(p3 >= 0 && p3 < vertexCount && std::count(itBegin, itEnd, p3)){
-        if(weights[p3] != - 1 && minValue > weights[p3]){
+    if(p3 >= 0 && p3 < vertexCount && std::count(itBegin, itEnd, p3) == 0){
+        if(weights[p3] != INT_MAX && minValue > weights[p3]){
             minValue = weights[p3];
             result = p3;
         }
     }
-    if(p4 >= 0 && p4 < vertexCount && std::count(itBegin, itEnd, p4)){
-        if(weights[p4] != - 1 && minValue > weights[p4]){
+    if(p4 >= 0 && p4 < vertexCount && std::count(itBegin, itEnd, p4) == 0){
+        if(weights[p4] != INT_MAX && minValue > weights[p4]){
             minValue = weights[p4];
             result = p4;
         }
