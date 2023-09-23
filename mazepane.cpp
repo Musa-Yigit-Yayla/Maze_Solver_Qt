@@ -116,6 +116,8 @@ void MazePane::solve(){
     bool solved = weight[this->targetLabelPos] != INT_MAX;
     cout << "Debug: Solved state of the current maze is " << solved << endl << "Weight of the tarLabel is " << weight[this->targetLabelPos] << endl
          << "target label position is " << this->targetLabelPos << endl;
+    //set the source pos weight to 0 for later use in solution visualization
+    weight[this->sourceLabelPos] = 0;
     this->visualizeSolution(solved, weight, adjMatrix, vertexCount);
     //deallocate adjMatrix since it's dynamically allocated
     for(int i = 0; i < vertexCount; i++){
@@ -133,16 +135,17 @@ void MazePane::visualizeSolution(bool isSolved, const int weights[], int* adjMat
         //backtrack the shortest path from source to target and store them in a vector
         vector<int> solutionPath;
         int currLabel = this->targetLabelPos;
-        while(currLabel != this->sourceLabelPos && currLabel != -1){ //CURRLABEL != -1 IS PROBLEMATIC
+        while(currLabel != this->sourceLabelPos){ //&& currLabel != -1){ //CURRLABEL != -1 IS PROBLEMATIC
             //retrieve the minimum weighted adjacent of currLabel and set it as currLabel after having pushed it into the vector
             int minAdjacent = this->getSmallestAdjacentLabel(weights, vertexCount, currLabel, solutionPath);
             //cout << "Debug: Solution path vertices are: ";
-            if(minAdjacent != -1){
+            if(minAdjacent != -1 && weights[minAdjacent] != 0){
                 solutionPath.push_back(minAdjacent);
                 cout << "Pushing " << minAdjacent << " to solution path" << endl;
             }
             else{
                 cout << minAdjacent << " is not a sol cell,";
+                break;
             }
             currLabel = minAdjacent;
         }
@@ -192,6 +195,7 @@ void MazePane::solveTimerSlot(){
         if(solved){
             vector<int> solutionPath;
             QVariant v2 = this->solveTimer->property("solutionPath");
+            solutionPath = v2.value<vector<int>>();
             for(int currLabel: currLabels){
                 int currLabelRow = mzg.getLabelRow(currLabel);
                 int currLabelColumn = mzg.getLabelColumn(currLabel);
@@ -201,7 +205,10 @@ void MazePane::solveTimerSlot(){
 
                 vector<int>::iterator solBegin = solutionPath.begin();
                 vector<int>::iterator solTerminate = solutionPath.end();
-                if(std::count(solBegin, solTerminate, currLabel) == 0 && currLabel != this->sourceLabelPos){
+                if(currLabel == this->sourceLabelPos){
+                    continue;
+                }
+                if(std::count(solBegin, solTerminate, currLabel) == 0){//&& currLabel != this->sourceLabelPos){
                     //regular visited label
                     //retrieve the rectangle widget and set the state to visited state
                     this->mazeArr[currLabelRow][currLabelColumn] = MazePane::VISITED_GRID_VALUE;
@@ -644,25 +651,25 @@ int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCoun
     cout << endl;
     vector<int>::const_iterator itBegin = solutionPath.begin();
     vector<int>::const_iterator itEnd = solutionPath.end();
-    if(p1 >= 0 && p1 < vertexCount && std::count(itBegin, itEnd, p1) == 0){
+    if(p1 >= 0 && p1 < vertexCount && (p1 != this->targetLabelPos) && std::count(itBegin, itEnd, p1) == 0){
         if(weights[p1] != INT_MAX && minValue > weights[p1]){ //!!!swap INT_MAX with -1 if necessary
             minValue = weights[p1];
             result = p1;
         }
     }
-    if(p2 >= 0 && p2 < vertexCount && std::count(itBegin, itEnd, p2) == 0){
+    if(p2 >= 0 && p2 < vertexCount && (p2 != this->targetLabelPos) && std::count(itBegin, itEnd, p2) == 0){
         if(weights[p2] != INT_MAX && minValue > weights[p2]){
             minValue = weights[p2];
             result = p2;
         }
     }
-    if(p3 >= 0 && p3 < vertexCount && std::count(itBegin, itEnd, p3) == 0){
+    if(p3 >= 0 && p3 < vertexCount && (p3 != this->targetLabelPos) && std::count(itBegin, itEnd, p3) == 0){
         if(weights[p3] != INT_MAX && minValue > weights[p3]){
             minValue = weights[p3];
             result = p3;
         }
     }
-    if(p4 >= 0 && p4 < vertexCount && std::count(itBegin, itEnd, p4) == 0){
+    if(p4 >= 0 && p4 < vertexCount && (p4 != this->targetLabelPos) && std::count(itBegin, itEnd, p4) == 0){
         if(weights[p4] != INT_MAX && minValue > weights[p4]){
             minValue = weights[p4];
             result = p4;
