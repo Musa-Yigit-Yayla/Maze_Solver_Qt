@@ -141,7 +141,7 @@ void MazePane::solve(){
     }
     cout << endl;
     //visualize the solution with a timer event
-    bool solved = weight[this->targetLabelPos] != INT_MAX;
+    bool solved = weight[this->targetLabelPos] != MazePane::MAX_WEIGHT;
     cout << "Debug: Solved state of the current maze is " << solved << endl << "Weight of the tarLabel is " << weight[this->targetLabelPos] << endl
          << "target label position is " << this->targetLabelPos << endl;
     //set the source pos weight to 0 for later use in solution visualization
@@ -253,6 +253,9 @@ void MazePane::solveTimerSlot(){
         }
         else{ //failed state
             for(int currLabel: currLabels){
+                if(currLabel == this->sourceLabelPos){
+                    continue;
+                }
                 int currLabelRow = mzg.getLabelRow(currLabel);
                 int currLabelColumn = mzg.getLabelColumn(currLabel);
 
