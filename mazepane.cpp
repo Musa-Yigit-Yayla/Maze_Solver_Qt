@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <queue>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -59,6 +60,7 @@ void MazePane::solve(){
         if(this->mazeArr[currLabelRow][currLabelColumn] == MazePane::WALL_GRID_VALUE){
             //continue as we cannot be on a wall hence there is no need to compute travel cost to its adjacent square
             //!!!PROBLEM MIGHT BE STEMMING FROM HERE
+
             continue;
         }
         for(int j = 0; j < vertexCount; j++){
@@ -67,31 +69,48 @@ void MazePane::solve(){
                 int adjColumn = mzg.getLabelColumn(j);
                 if(this->mazeArr[adjRow][adjColumn] == MazePane::WALL_GRID_VALUE){
                     //set to int max as it's a wall
-                    adjMatrix[i][j] = INT_MAX;
+                    adjMatrix[i][j] = MazePane::MAX_WEIGHT;
                 }
                 else{
                     //set it to 1
                     adjMatrix[i][j] = 1;
                 }
             }
-            else if(i == j){
-                adjMatrix[i][j] = 0;
-            }
+            /*else if(i == j){
+                adjMatrix[i][j] = MazePane::MAX_WEIGHT;
+            }*/
             else{
-                adjMatrix[i][j] = INT_MAX;
+                adjMatrix[i][j] = MazePane::MAX_WEIGHT;
             }
         }
     }
+    //write into file after having cleared it
+    /*ofstream f("adjMatrix.txt", ios::app);
+    //f.open("adjMatrix.txt", ios::out | ios::trunc);
+    if(f.is_open()){
+        cout << "adjMatrix.txt is opened successfully" << endl;
+        f << "Adjacency is as follows before dijkstra" << endl;
+        for(int i = 0; i < vertexCount; i++){
+            for(int j = 0; j < vertexCount; j++){
+                f << adjMatrix[i][j] << " ";
+            }
+            f << endl;
+        }
+        f.close();
+    }
+    else{
+        cout << "Error: adjMatrix.txt could not be opened" << endl;
+    }*/
     //apply dijktra's shortest path algorithm
 
-    int originVertex = this->getSourceLabel();
+    int originVertex = this->sourceLabelPos;
     unordered_set<int> vertexSet;
     vertexSet.insert(originVertex);
 
     int weight[vertexCount]; //minimum total weight of traveling to each moveable cell starting from origin vertex
-    for(int i = 0; i < vertexCount; i++){
-        weight[i] = INT_MAX;
-    }
+    /*for(int i = 0; i < vertexCount; i++){
+        weight[i] = MazePane::MAX_WEIGHT;
+    }*/
     for(int i = 0; i < vertexCount; i++){
         weight[i] = adjMatrix[originVertex][i];
     }
@@ -100,18 +119,27 @@ void MazePane::solve(){
     for(int i = 0; i < vertexCount - 1; i++){
         //find the smallest weighted vertex v which is not in vertex set and which is not a wall
         int v = MazePane::getSmallestUnvisitedLabel(vertexSet, weight, vertexCount);
-        vertexSet.insert(v); //add v to the vertex set
+
         if(v != -1){
+            vertexSet.insert(v); //add v to the vertex set
             //check weight j for all vertices not included in vertex set
             for(int j = 0; j < vertexCount; j++){
                 if(vertexSet.count(j) == 0){
-                    if((weight[v] != INT_MAX && adjMatrix[v][j] != INT_MAX) && weight[j] > weight[v] + adjMatrix[v][j]){
-                        weight[j] = weight[j] + adjMatrix[v][j];
+                    if(weight[j] > weight[v] + adjMatrix[v][j]){ //(weight[v] != MazePane::MAX_WEIGHT && adjMatrix[v][j] != MazePane::MAX_WEIGHT) &&
+                        weight[j] = weight[v] + adjMatrix[v][j];
                     }
                 }
             }
         }
     }
+    cout << "Dijkstra: Weights are as follows after dijkstra:" << endl;
+    for(int i = 0; i < this->rowLength; i++){
+        for(int j = 0; j < this->columnLength; j++){
+            cout << weight[mzg.getLabel(i, j)] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
     //visualize the solution with a timer event
     bool solved = weight[this->targetLabelPos] != INT_MAX;
     cout << "Debug: Solved state of the current maze is " << solved << endl << "Weight of the tarLabel is " << weight[this->targetLabelPos] << endl
@@ -621,14 +649,14 @@ bool MazePane::isAdjacent(int label1, int label2) const{
 //disregards walls
 //returns -1 if no candidate is found
 int MazePane::getSmallestUnvisitedLabel(const unordered_set<int>& vertexSet, const int weights[], const int vertexCount){
-    int minResult = INT_MAX;
+    int minResult = MazePane::MAX_WEIGHT;
 
     for(int i = 0; i < vertexCount; i++){
         if(vertexSet.count(i) == 0 && weights[i] != -1 && weights[i] < minResult){
             minResult = i;
         }
     }
-    if(minResult == INT_MAX){
+    if(minResult == MazePane::MAX_WEIGHT){
         minResult = -1;
     }
     return minResult;
@@ -644,7 +672,7 @@ int MazePane::getSmallestAdjacentLabel(const int weights[], const int vertexCoun
     p4 = currLabel - 1;
 
     int result = -1;
-    int minValue = INT_MAX;
+    int minValue = MazePane::MAX_WEIGHT;
     //print out the exact solution path for debugging purposes
     cout << "Debug: The current exact solution path is; ";
     for(int i = 0; i < solutionPath.size(); i++){
