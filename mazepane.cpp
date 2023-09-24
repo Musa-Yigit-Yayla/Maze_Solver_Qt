@@ -329,6 +329,13 @@ int MazePane::getTargetLabel() const{
     }
     return -1;
 }
+//label state cannot be source state or target state
+void MazePane::setCellState(int row, int column, int state){
+    bool isValidState = state == MazePane::EMPTY_GRID_VALUE || MazePane::WALL_GRID_VALUE || MazePane::FAILED_GRID_VALUE || MazePane::VISITED_GRID_VALUE || MazePane::SOLUTION_GRID_VALUE;
+    if(row >= 0 && row < this->rowLength && column >= 0 && column < this->columnLength && isValidState){
+        this->mazeArr[row][column] = state;
+    }
+}
 //Sets the prev source as an empty grid
 //Does not update the whole matrix but just adjusts the source index
 //Given row and column values are assumed to be correct, no validation is performed

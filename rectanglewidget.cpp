@@ -53,23 +53,40 @@ QWidget* RectangleWidget::getParent() const{
 //recursivelyCalled method will be used for logic determining execution flow, do not pass anything if called from outside
 void RectangleWidget::setState(const int state, const bool recursivelyCalled){
     QColor* newColor = nullptr;
+    MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
+    int currLabel;
     switch(state){
         case EMPTY_STATE:
+            //if the current rectangle is source or target rectangle we do not perform any operations and return
+            if(this->color != NULL && !recursivelyCalled && (*this->color == RectangleWidget::SOURCE_COLOR || *this->color == RectangleWidget::TARGET_COLOR)){
+                //do not perform any state changes and return immediately
+                return;
+            }
+
+            currLabel = this->mazePane->getElementLabel(this);
+            this->mazePane->setCellState(mzg.getLabelRow(currLabel), mzg.getLabelColumn(currLabel), state);
+            this->state = state;
+        break;
         case WALL_STATE:
             //if the current rectangle is source or target rectangle we do not perform any operations and return
         if(this->color != NULL && !recursivelyCalled && (*this->color == RectangleWidget::SOURCE_COLOR || *this->color == RectangleWidget::TARGET_COLOR)){
             //do not perform any state changes and return immediately
             return;
         }
-        this->state = state; break;
+        currLabel = this->mazePane->getElementLabel(this);
+        this->mazePane->setCellState(mzg.getLabelRow(currLabel), mzg.getLabelColumn(currLabel), state);
+        this->state = state;
+        break;
         case VISITED_STATE:
         case SOLUTION_STATE:
-        case FAILED_STATE: this->state = state; break;
+        case FAILED_STATE:
+            currLabel = this->mazePane->getElementLabel(this);
+            this->mazePane->setCellState(mzg.getLabelRow(currLabel), mzg.getLabelColumn(currLabel), state);
+            this->state = state; break;
         case MazePane::START_POS_VALUE: this->state = state;
             if(this->mazePane != NULL){
-                int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
+                currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
                 if(currLabel != this->mazePane->getSourceLabel()){
-                    MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
                     int currLabelRow = mzg.getLabelRow(currLabel);
                     int currLabelColumn = mzg.getLabelColumn(currLabel);
                     this->mazePane->setSourcePos(currLabelRow, currLabelColumn); //required operations will be performed regarding specified label's
@@ -82,7 +99,7 @@ void RectangleWidget::setState(const int state, const bool recursivelyCalled){
         break;
         case MazePane::TARGET_POS_VALUE: this->state = state;
         if(this->mazePane != NULL){
-            int currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
+            currLabel = this->mazePane->getElementLabel(this); //label for current rectangle which represents its position in matrix
             if(currLabel != this->mazePane->getTargetLabel()){
                 MazeGenerator mzg(0, 0, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, 0, 0, 0, 0);
                 int currLabelRow = mzg.getLabelRow(currLabel);

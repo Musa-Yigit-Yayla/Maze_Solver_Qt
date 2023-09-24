@@ -46,6 +46,7 @@ public:
     int getTargetLabel() const; //returns the target value's label
     void setSourcePos(int row, int column);
     void setTargetPos(int row, int column);
+    void setCellState(int row, int column, int state); //label state cannot be source state or target state
     static bool isTraversable(int** givenMaze, int mazeLength, int columnLength);
     static vector<int> getSourceTargetLabels(int* givenMaze[], int rowLength, int columnLength);
     QWidget* getGridElement(int row, int column) const; //return pointer to the grid element
