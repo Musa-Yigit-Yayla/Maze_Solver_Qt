@@ -9,6 +9,7 @@ using namespace std;
 Widget::Widget(QWidget *parent) : QWidget(parent){
     cout << "Widget constructor invoked" << endl;
     this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->setFixedSize(Widget::WIDGET_WIDTH, Widget::WIDGET_HEIGHT);
     qDebug() << "Horizontal Policy:" << this->sizePolicy().horizontalPolicy();
     this->setParent(parent);
     this->mazeGenerator = new MazeGenerator(Widget::TRAVERSABLE_MAZE_THRESHOLD, Widget::AUTO_GENERATED_MAZE_COUNT, MazePane::ROW_LENGTH, MazePane::COLUMN_LENGTH, MazePane::START_POS_VALUE, MazePane::TARGET_POS_VALUE, MazePane::EMPTY_GRID_VALUE, MazePane::WALL_GRID_VALUE);
@@ -53,6 +54,23 @@ void Widget::setLayoutManagement(){
     this->verticalBox->addStretch();
     //add the vertical box to the widget itself
     this->setLayout(this->verticalBox);
+    //set each child resizable property to fixed
+    this->generationSelector->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btAddWall->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btAddEmpty->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btSetSource->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btSetTarget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btRegenerate->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btSolve->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->btReset->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    this->radioLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    for(QLabel* currLabel: this->colorLabels){
+        currLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
+    for(Circle* currCircle: this->colorCircles){
+        currCircle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
+
 }
 //Caller is responsible of proper deallocation of the returned maze
 int** Widget::getGeneratedMaze(){
@@ -123,8 +141,10 @@ void Widget::setButtons(){
     this->btSolve->setFixedWidth(Widget::SOLVE_BUTTON_WIDTH);
     this->btRegenerate = new QPushButton("Regenerate");
     this->btRegenerate->setFixedWidth(Widget::REGENERATE_BUTTON_WIDTH);
+    this->btReset = new QPushButton("Reset");
     QObject::connect(this->btSolve, (&QPushButton::clicked), this, (&Widget::solveHandler));
     QObject::connect(this->btRegenerate, (&QPushButton::clicked), this, (&Widget::regenerateHandler));
+    QObject::connect(this->btReset, (&QPushButton::clicked), this, (&Widget::resetHandler));
 }
 void Widget::setColorPane(){
     this->colorPane = new QGridLayout(this);
@@ -194,9 +214,34 @@ void Widget::generationSelectorHandler(int selectionIndex){
     if(selectionIndex == 0){ //self generate, user generates
         //remove the regenerate button from the pane
         this->btRegenerateSetVisible(false);
+        this->btReset->setVisible(true);
+        cout << "Debug: selecting self generate in generationSelectorHandler" << endl;
+        //this->hbox1->replaceWidget(this->btRegenerate, this->btReset);
+        this->hbox1->removeItem(this->radioButtonHolder);
+        this->hbox1->removeWidget(this->btSolve);
+        this->hbox1->removeWidget(this->btRegenerate);
+        this->hbox1->removeWidget(this->generationSelector);
+        //add the widgets with their initial order replacing push buttons
+        this->hbox1->insertItem(this->hbox1->count() - 1, this->radioButtonHolder);
+        this->hbox1->insertWidget(this->hbox1->count() - 1, this->btSolve);
+        this->hbox1->insertWidget(this->hbox1->count() - 1, this->btReset);
+        //this->hbox1->addStretch();
+        this->hbox1->insertWidget(this->hbox1->count(), this->generationSelector);
     }
     else if(selectionIndex == 1){//auto generate
         this->btRegenerateSetVisible(true);
+        this->btReset->setVisible(false);
+        cout << "Debug: selecting auto generate in generationSelectorHandler" << endl;
+        this->hbox1->removeItem(this->radioButtonHolder);
+        this->hbox1->removeWidget(this->btSolve);
+        this->hbox1->removeWidget(this->btReset);
+        this->hbox1->removeWidget(this->generationSelector);
+        //add the widgets with their initial order replacing push buttons
+        this->hbox1->insertItem(this->hbox1->count() - 1, this->radioButtonHolder);
+        this->hbox1->insertWidget(this->hbox1->count() - 1, this->btSolve);
+        this->hbox1->insertWidget(this->hbox1->count() - 1, this->btRegenerate);
+        //this->hbox1->addStretch();
+        this->hbox1->insertWidget(this->hbox1->count(), this->generationSelector);
     }
 }
 //string Widget::getSelectedRadioButton() const{}
@@ -233,6 +278,21 @@ void Widget::regenerateHandler(bool checked){
     this->currMaze = new MazePane(true);
     //add the new maze pane onto our vbox
     this->verticalBox->addLayout(this->currMaze);
+}
+void Widget::resetHandler(bool checked){
+    //create a brand new thoroughly empty maze
+    this->verticalBox->removeItem(this->currMaze);
+    delete this->currMaze;
+    cout << "Debug: currMaze deletion has been made in the resetHandler" << endl;
+    this->currMaze = new MazePane(false);
+    cout << "Debug: new currMaze has been created in the resetHandler" << endl;
+    this->verticalBox->addLayout(this->currMaze);
+    cout << "Debug: new currMaze has been added in the resetHandler" << endl;
+}
+//protected visibility
+//Ignores the size change of our main widget
+void Widget::resizeEvent(QResizeEvent* event){
+    event->ignore();
 }
 //void Widget::radioButtonToggleHandler(QAbstractButton* button, bool checked){}
 const string Widget::SELF_GENERATE_VALUE = "Self Generate";

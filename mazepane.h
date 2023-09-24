@@ -26,7 +26,7 @@ public:
     static const int TARGET_POS_VALUE = 3;
     static const int FAILED_TIMER_MILLIS = 125;
     static const int SOLVED_TIMER_MILLIS = 200;
-    static const int MAX_WEIGHT = pow(10, 6) + 1; //max weight possible between two vertices to avoid overflow
+    static const int MAX_WEIGHT; //= pow(10, 6) + 1; //max weight possible between two vertices to avoid overflow
 private:
     int** mazeArr = nullptr;
     int rowLength = ROW_LENGTH;

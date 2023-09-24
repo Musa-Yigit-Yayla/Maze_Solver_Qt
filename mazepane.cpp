@@ -618,6 +618,7 @@ void MazePane::setDefaultMaze(){
     }
     this->mazeArr = new int*[MazePane::ROW_LENGTH];
     for(int i = 0; i < this->columnLength; i++){
+        this->mazeArr[i] = new int[MazePane::COLUMN_LENGTH];
         for(int j = 0; j < this->columnLength; j++){
             mazeArr[i][j] = EMPTY_GRID_VALUE;
         }
@@ -789,3 +790,4 @@ void MazePane::bfsMoveables(vector<vector<int>>& prioritizedVertices) const{
         prioritizedVertices.insert(posIterator, unvisitedAdj);
     }
 }
+const int MazePane::MAX_WEIGHT = pow(10, 6) + 1;

@@ -15,6 +15,7 @@
 #include <QSizePolicy>
 #include "circle.h"
 #include <vector>
+#include <QResizeEvent>
 
 //#include "mazegenerator.h"
 //#include "mazepane.h"
@@ -38,6 +39,8 @@ public:
     enum RADIO_SELECTION_VALUES{RADIO_WALL = 0, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
 
     //ui constants
+    static const int WIDGET_WIDTH = 700;
+    static const int WIDGET_HEIGHT = 600;
     static const int RADIO_BUTTON_HOLDER_SPACING = 20;
     static const int COLOR_PANE_H_GAP = 10;
     static const int COLOR_PANE_V_GAP = 15;
@@ -55,6 +58,7 @@ private:
     QButtonGroup* radioButtonGroup = nullptr;
     QPushButton* btRegenerate = nullptr; //regenerate a new maze, will be visible when auto generate is selected from combobox
     QPushButton* btSolve = nullptr;
+    QPushButton* btReset = nullptr; //resets the current maze to a totally empty maze without walls
     QLabel* radioLabel = nullptr; //label for explaining radio button functionalities
     vector<QLabel*> colorLabels; //labels for explaining colors' meanings
     vector<Circle*> colorCircles;
@@ -85,6 +89,8 @@ private:
     void setLayoutManagement();
 
     void btRegenerateSetVisible(bool visible); //set the visibility status for btRegenerate
+protected:
+    void resizeEvent(QResizeEvent* event) override;
 signals:
 
 public slots:
@@ -92,6 +98,7 @@ public slots:
     //void radioButtonToggleHandler(QAbstractButton *button, bool checked);
     void solveHandler(bool checked = true);
     void regenerateHandler(bool checked = true);
+    void resetHandler(bool checked = true);
     void radioButtonHandler(QAbstractButton *button, bool checked);
 };
 #endif // WIDGET_H
