@@ -39,8 +39,8 @@ public:
     enum RADIO_SELECTION_VALUES{RADIO_WALL = 0, RADIO_EMPTY, RADIO_SOURCE, RADIO_TARGET};
 
     //ui constants
-    static const int WIDGET_WIDTH = 700;
-    static const int WIDGET_HEIGHT = 600;
+    static const int WIDGET_WIDTH = 750;
+    static const int WIDGET_HEIGHT = 650;
     static const int RADIO_BUTTON_HOLDER_SPACING = 20;
     static const int COLOR_PANE_H_GAP = 10;
     static const int COLOR_PANE_V_GAP = 15;
